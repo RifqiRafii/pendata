@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Eksplorasi Data IRIS &#8212; Penambangan Data</title>
+    <title>Visualisasi Data IRIS &#8212; Penambangan Data</title>
   
   
   
@@ -62,11 +62,10 @@ const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
     <script async="async" src="_static/sphinx-thebe.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'EksplorasiData';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'VisualisasiData';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Describing Data" href="DescribeData.html" />
-    <link rel="prev" title="Memahami Data" href="DataUnderstanding.html" />
+    <link rel="prev" title="Describing Data" href="DescribeData.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -175,8 +174,9 @@ const thebe_selector_output = ".output, .cell_output"
         </ul>
         <ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="DataUnderstanding.html">Memahami Data</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">Eksplorasi Data IRIS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="EksplorasiData.html">Eksplorasi Data IRIS</a></li>
 <li class="toctree-l2"><a class="reference internal" href="DescribeData.html">Describing Data</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Visualisasi Data IRIS</a></li>
 </ul>
 </details></li>
 </ul>
@@ -250,7 +250,7 @@ const thebe_selector_output = ".output, .cell_output"
       
       
       
-      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2FEksplorasiData.html&body=Your%20issue%20content%20here." target="_blank"
+      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2FVisualisasiData.html&body=Your%20issue%20content%20here." target="_blank"
    class="btn btn-sm btn-source-issues-button dropdown-item"
    title="Open an issue"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -280,7 +280,7 @@ const thebe_selector_output = ".output, .cell_output"
       
       
       
-      <li><a href="_sources/EksplorasiData.md" target="_blank"
+      <li><a href="_sources/VisualisasiData.md" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -364,7 +364,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Eksplorasi Data IRIS</h1>
+    <h1>Visualisasi Data IRIS</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -374,9 +374,8 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tabel-10-data-pertama-dataset-iris">Tabel 10 Data Pertama Dataset IRIS</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#deskripsi-dataset">Deskripsi Dataset</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#deteksi-outlier">Deteksi Outlier</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#scatter-plot">Scatter Plot</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#histogram">Histogram</a></li>
 </ul>
             </nav>
         </div>
@@ -388,154 +387,20 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="eksplorasi-data-iris">
-<h1>Eksplorasi Data IRIS<a class="headerlink" href="#eksplorasi-data-iris" title="Permalink to this heading">#</a></h1>
-<p>Eksplorasi data merupakan tahapan awal dalam proses analisis data yang bertujuan untuk memahami karakteristik, struktur, serta pola yang terdapat dalam suatu dataset. Tahapan ini penting dilakukan sebelum proses pemodelan atau analisis lanjutan.</p>
-<p>Dataset yang digunakan dalam analisis ini adalah <strong>Iris Dataset</strong>, yang diperkenalkan oleh Ronald A. Fisher pada tahun 1936. Dataset ini sering digunakan dalam studi klasifikasi dan machine learning karena memiliki struktur sederhana namun pola pemisahan kelas yang jelas.</p>
-<p>Dataset IRIS terdiri dari 150 observasi dengan 4 atribut numerik dan 1 atribut kategorikal sebagai label kelas.</p>
-<p>Berikut adalah 10 data pertama pada dataset IRIS Flower:</p>
-<section id="tabel-10-data-pertama-dataset-iris">
-<h2>Tabel 10 Data Pertama Dataset IRIS<a class="headerlink" href="#tabel-10-data-pertama-dataset-iris" title="Permalink to this heading">#</a></h2>
-<div class="pst-scrollable-table-container"><table class="table">
-<thead>
-<tr class="row-odd"><th class="head"><p>No</p></th>
-<th class="head"><p>Sepal Length</p></th>
-<th class="head"><p>Sepal Width</p></th>
-<th class="head"><p>Petal Length</p></th>
-<th class="head"><p>Petal Width</p></th>
-<th class="head"><p>Species</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p>1</p></td>
-<td><p>5.1</p></td>
-<td><p>3.5</p></td>
-<td><p>1.4</p></td>
-<td><p>0.2</p></td>
-<td><p>Iris-setosa</p></td>
-</tr>
-<tr class="row-odd"><td><p>2</p></td>
-<td><p>4.9</p></td>
-<td><p>3.0</p></td>
-<td><p>1.4</p></td>
-<td><p>0.2</p></td>
-<td><p>Iris-setosa</p></td>
-</tr>
-<tr class="row-even"><td><p>3</p></td>
-<td><p>4.7</p></td>
-<td><p>3.2</p></td>
-<td><p>1.3</p></td>
-<td><p>0.2</p></td>
-<td><p>Iris-setosa</p></td>
-</tr>
-<tr class="row-odd"><td><p>4</p></td>
-<td><p>4.6</p></td>
-<td><p>3.1</p></td>
-<td><p>1.5</p></td>
-<td><p>0.2</p></td>
-<td><p>Iris-setosa</p></td>
-</tr>
-<tr class="row-even"><td><p>5</p></td>
-<td><p>5.0</p></td>
-<td><p>3.6</p></td>
-<td><p>1.4</p></td>
-<td><p>0.2</p></td>
-<td><p>Iris-setosa</p></td>
-</tr>
-<tr class="row-odd"><td><p>6</p></td>
-<td><p>5.4</p></td>
-<td><p>3.9</p></td>
-<td><p>1.7</p></td>
-<td><p>0.4</p></td>
-<td><p>Iris-setosa</p></td>
-</tr>
-<tr class="row-even"><td><p>7</p></td>
-<td><p>4.6</p></td>
-<td><p>3.4</p></td>
-<td><p>1.4</p></td>
-<td><p>0.3</p></td>
-<td><p>Iris-setosa</p></td>
-</tr>
-<tr class="row-odd"><td><p>8</p></td>
-<td><p>5.0</p></td>
-<td><p>3.4</p></td>
-<td><p>1.5</p></td>
-<td><p>0.2</p></td>
-<td><p>Iris-setosa</p></td>
-</tr>
-<tr class="row-even"><td><p>9</p></td>
-<td><p>4.4</p></td>
-<td><p>2.9</p></td>
-<td><p>1.4</p></td>
-<td><p>0.2</p></td>
-<td><p>Iris-setosa</p></td>
-</tr>
-<tr class="row-odd"><td><p>10</p></td>
-<td><p>4.9</p></td>
-<td><p>3.1</p></td>
-<td><p>1.5</p></td>
-<td><p>0.1</p></td>
-<td><p>Iris-setosa</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<p>Dataset Iris Flower ini didapatkan dari kaggle, berikut link kaggle dari data: <a class="reference external" href="https://www.kaggle.com/datasets/arshid/iris-flower-dataset">https://www.kaggle.com/datasets/arshid/iris-flower-dataset</a></p>
+  <section class="tex2jax_ignore mathjax_ignore" id="visualisasi-data-iris">
+<h1>Visualisasi Data IRIS<a class="headerlink" href="#visualisasi-data-iris" title="Permalink to this heading">#</a></h1>
+<p>Visualisasi data adalah proses menyajikan data dalam bentuk grafik, diagram, atau gambar agar informasi lebih mudah dipahami, dianalisis, dan diinterpretasikan. Dengan visualisasi, pola, tren, perbandingan, dan hubungan antar variabel dapat terlihat lebih jelas dibandingkan hanya melihat angka dalam tabel.</p>
+<section id="scatter-plot">
+<h2>Scatter Plot<a class="headerlink" href="#scatter-plot" title="Permalink to this heading">#</a></h2>
+<p>Digunakan untuk melihat hubungan antara dua variabel numerik. kita dapat mengecek menggunakan aplikasi orange dan import data yang akan divisualisasikan, disini sebagai contoh menggunakan data IRIS.</p>
+<p><img alt="alt text" src="_images/sp1.png" />
+<img alt="alt text" src="_images/sp2.png" /></p>
 </section>
-<section id="deskripsi-dataset">
-<h2>Deskripsi Dataset<a class="headerlink" href="#deskripsi-dataset" title="Permalink to this heading">#</a></h2>
-<p>Dataset IRIS memiliki lima atribut sebagai berikut:</p>
-<div class="pst-scrollable-table-container"><table class="table">
-<thead>
-<tr class="row-odd"><th class="head"><p>No</p></th>
-<th class="head"><p>Atribut</p></th>
-<th class="head"><p>Tipe Data</p></th>
-<th class="head"><p>Deskripsi</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p>1</p></td>
-<td><p>sepal length</p></td>
-<td><p>Numerik (cm)</p></td>
-<td><p>Panjang kelopak bunga</p></td>
-</tr>
-<tr class="row-odd"><td><p>2</p></td>
-<td><p>sepal width</p></td>
-<td><p>Numerik (cm)</p></td>
-<td><p>Lebar kelopak bunga</p></td>
-</tr>
-<tr class="row-even"><td><p>3</p></td>
-<td><p>petal length</p></td>
-<td><p>Numerik (cm)</p></td>
-<td><p>Panjang mahkota bunga</p></td>
-</tr>
-<tr class="row-odd"><td><p>4</p></td>
-<td><p>petal width</p></td>
-<td><p>Numerik (cm)</p></td>
-<td><p>Lebar mahkota bunga</p></td>
-</tr>
-<tr class="row-even"><td><p>5</p></td>
-<td><p>species</p></td>
-<td><p>Kategorikal</p></td>
-<td><p>Jenis bunga iris</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<p>Dataset terdiri dari tiga kelas:</p>
-<ul class="simple">
-<li><p>Iris-setosa</p></li>
-<li><p>Iris-versicolor</p></li>
-<li><p>Iris-virginica</p></li>
-</ul>
-<p>Masing-masing kelas berjumlah 50 data sehingga dataset bersifat seimbang (balanced dataset).</p>
-</section>
-<section id="deteksi-outlier">
-<h2>Deteksi Outlier<a class="headerlink" href="#deteksi-outlier" title="Permalink to this heading">#</a></h2>
-<p>Deteksi outlier dilakukan menggunakan widget Outliers pada Orange Data Mining. Berdasarkan hasil analisis, teridentifikasi 15 data yang dikategorikan sebagai outlier oleh model.</p>
-<p>Namun, perlu diperhatikan bahwa metode yang digunakan bersifat berbasis model (misalnya One-Class SVM atau Isolation Forest), sehingga data yang dianggap outlier merupakan data yang memiliki pola berbeda dari mayoritas distribusi global, bukan karena kesalahan pencatatan.</p>
-<p>Dataset IRIS secara umum tidak memiliki outlier ekstrem berdasarkan analisis statistik klasik (misalnya metode IQR). Oleh karena itu, data yang terdeteksi lebih merepresentasikan perbedaan karakteristik antar kelas daripada anomali data.</p>
-<p><img alt="alt text" src="_images/outliers.png" /></p>
+<section id="histogram">
+<h2>Histogram<a class="headerlink" href="#histogram" title="Permalink to this heading">#</a></h2>
+<p>Histogram adalah grafik yang digunakan untuk menampilkan distribusi frekuensi data numerik dengan cara membagi data ke dalam beberapa interval (disebut bin atau kelas).</p>
+<p>Histogram digunakan untuk melihat persebaran frekuensi nilai pada fitur sepal_width yang dikelompokkan berdasarkan spesies.
+<img alt="alt text" src="_images/histogram.png" /></p>
 </section>
 </section>
 
@@ -570,22 +435,13 @@ document.write(`
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="DataUnderstanding.html"
+       href="DescribeData.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Memahami Data</p>
-      </div>
-    </a>
-    <a class="right-next"
-       href="DescribeData.html"
-       title="next page">
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">next</p>
         <p class="prev-next-title">Describing Data</p>
       </div>
-      <i class="fa-solid fa-angle-right"></i>
     </a>
 </div>
                 </footer>
@@ -603,9 +459,8 @@ document.write(`
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tabel-10-data-pertama-dataset-iris">Tabel 10 Data Pertama Dataset IRIS</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#deskripsi-dataset">Deskripsi Dataset</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#deteksi-outlier">Deteksi Outlier</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#scatter-plot">Scatter Plot</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#histogram">Histogram</a></li>
 </ul>
   </nav></div>
 
