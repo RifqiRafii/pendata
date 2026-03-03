@@ -62,9 +62,12 @@ const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
     <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'DescribeData';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Visualisasi Data IRIS" href="VisualisasiData.html" />
     <link rel="prev" title="Eksplorasi Data IRIS" href="EksplorasiData.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -176,6 +179,15 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="DataUnderstanding.html">Memahami Data</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="EksplorasiData.html">Eksplorasi Data IRIS</a></li>
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">Describing Data</a></li>
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="VisualisasiData.html">Visualisasi Data IRIS</a></li>
 </ul>
 </details></li>
 </ul>
@@ -373,10 +385,50 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Describing Data</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#statistik-deskriptif-describe-data">Statistik Deskriptif (Describe Data)</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ukuran-statistik-yang-digunakan">Ukuran Statistik yang Digunakan</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hasil-statistik-deskriptif-dataset-iris">Hasil Statistik Deskriptif Dataset IRIS</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mengukur-jarak-distance-measurement">Mengukur Jarak (Distance Measurement)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mengukur-distance-menggunakan-orange">Mengukur Distance Menggunakan Orange</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#langkah-langkah">Langkah-langkah</a></li>
 </ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#konsep-perhitungan-distance">Konsep Perhitungan Distance</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#euclidean-distance">Euclidean Distance</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#manhattan-distance">Manhattan Distance</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cosine-similarity">Cosine Similarity</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cosine-distance">Cosine Distance</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#output-distance-matrix">Output Distance Matrix</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretasi-hasil-distance">Interpretasi Hasil Distance</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#kemiripan-dalam-spesies">Kemiripan Dalam Spesies</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#perbedaan-antar-spesies">Perbedaan Antar Spesies</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualisasi-distance-map">Visualisasi Distance Map</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#pengukuran-jarak-pada-data-campuran">Pengukuran Jarak pada Data Campuran</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#contoh-data-campuran">Contoh Data Campuran</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#metode-pengukuran-gower-distance">Metode Pengukuran: Gower Distance</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#perhitungan-setiap-tipe-atribut">Perhitungan Setiap Tipe Atribut</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#atribut-numerik">1. Atribut Numerik</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#atribut-ordinal">2. Atribut Ordinal</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#atribut-kategorikal">3. Atribut Kategorikal</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#contoh-perhitungan-jarak-m1-dan-m2">Contoh Perhitungan Jarak M1 dan M2</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#langkah-1-hitung-range">Langkah 1: Hitung Range</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#langkah-2-hitung-selisih-ternormalisasi">Langkah 2: Hitung Selisih Ternormalisasi</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#langkah-3-hitung-gower-distance">Langkah 3: Hitung Gower Distance</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretasi-hasil">Interpretasi Hasil</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#kesimpulan">Kesimpulan</a></li>
+</ul>
+
             </nav>
         </div>
     </div>
@@ -455,6 +507,322 @@ document.write(`
 </div>
 <p><img alt="alt text" src="_images/statistik.png" /></p>
 </section>
+<section id="mengukur-jarak-distance-measurement">
+<h2>Mengukur Jarak (Distance Measurement)<a class="headerlink" href="#mengukur-jarak-distance-measurement" title="Permalink to this heading">#</a></h2>
+<p>Selain menggunakan statistik deskriptif, analisis data juga dapat dilakukan dengan mengukur jarak (distance) antar data. Pengukuran jarak bertujuan untuk mengetahui tingkat kemiripan (similarity) atau perbedaan (dissimilarity) antar objek dalam dataset.</p>
+<p>Pada dataset IRIS, setiap data bunga direpresentasikan oleh empat atribut numerik:
+-Sepal Length
+-Sepal Width
+-Petal Length
+-Petal Width</p>
+<p>Karena seluruh atribut bersifat numerik, metode jarak yang umum digunakan adalah:</p>
+<ul class="simple">
+<li><p>Euclidean Distance</p></li>
+<li><p>Manhattan Distance</p></li>
+<li><p>Cosine Distance</p></li>
+</ul>
+</section>
+<section id="mengukur-distance-menggunakan-orange">
+<h2>Mengukur Distance Menggunakan Orange<a class="headerlink" href="#mengukur-distance-menggunakan-orange" title="Permalink to this heading">#</a></h2>
+<p>Untuk menghitung jarak antar data pada dataset IRIS, digunakan software <strong>Orange Data Mining</strong>. Proses ini bertujuan untuk mengetahui tingkat kemiripan atau perbedaan antar objek berdasarkan atribut numerik.</p>
+<section id="langkah-langkah">
+<h3>Langkah-langkah<a class="headerlink" href="#langkah-langkah" title="Permalink to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p>Buka aplikasi <strong>Orange</strong></p></li>
+<li><p>Tambahkan widget <strong>File</strong></p></li>
+<li><p>Pilih dataset bawaan <strong>iris</strong></p></li>
+<li><p>Tambahkan widget <strong>Distances</strong></p></li>
+<li><p>Hubungkan <code class="docutils literal notranslate"><span class="pre">File</span> <span class="pre">→</span> <span class="pre">Distances</span></code></p></li>
+<li><p>Pilih metode jarak (Euclidean, Manhattan, atau Cosine)</p></li>
+<li><p>Hubungkan ke: Distance Map</p></li>
+</ol>
+</section>
+</section>
+<hr class="docutils" />
+<section id="konsep-perhitungan-distance">
+<h2>Konsep Perhitungan Distance<a class="headerlink" href="#konsep-perhitungan-distance" title="Permalink to this heading">#</a></h2>
+<section id="euclidean-distance">
+<h3>Euclidean Distance<a class="headerlink" href="#euclidean-distance" title="Permalink to this heading">#</a></h3>
+<div class="math notranslate nohighlight">
+\[
+d(x,y) = \sqrt{\sum_{i=1}^{n} (x_i - y_i)^2}
+\]</div>
+</section>
+<section id="manhattan-distance">
+<h3>Manhattan Distance<a class="headerlink" href="#manhattan-distance" title="Permalink to this heading">#</a></h3>
+<div class="math notranslate nohighlight">
+\[
+d(x,y) = \sum_{i=1}^{n} |x_i - y_i|
+\]</div>
+</section>
+<section id="cosine-similarity">
+<h3>Cosine Similarity<a class="headerlink" href="#cosine-similarity" title="Permalink to this heading">#</a></h3>
+<div class="math notranslate nohighlight">
+\[
+\text{cosine similarity} =
+\frac{x \cdot y}{||x|| \, ||y||}
+\]</div>
+</section>
+<section id="cosine-distance">
+<h3>Cosine Distance<a class="headerlink" href="#cosine-distance" title="Permalink to this heading">#</a></h3>
+<div class="math notranslate nohighlight">
+\[
+\text{cosine distance} = 1 - \text{cosine similarity}
+\]</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="output-distance-matrix">
+<h2>Output Distance Matrix<a class="headerlink" href="#output-distance-matrix" title="Permalink to this heading">#</a></h2>
+<p>Widget <strong>Distances</strong> menghasilkan matriks jarak (distance matrix) yang berisi jarak antar setiap pasangan data.</p>
+<p>Karakteristik matriks jarak:</p>
+<ul class="simple">
+<li><p>Nilai kecil → data semakin mirip</p></li>
+<li><p>Nilai besar → data semakin berbeda</p></li>
+<li><p>Elemen diagonal selalu bernilai:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[
+d(x,x) = 0
+\]</div>
+<p>karena jarak suatu data terhadap dirinya sendiri adalah nol.</p>
+</section>
+</section>
+<hr class="docutils" />
+<section class="tex2jax_ignore mathjax_ignore" id="interpretasi-hasil-distance">
+<h1>Interpretasi Hasil Distance<a class="headerlink" href="#interpretasi-hasil-distance" title="Permalink to this heading">#</a></h1>
+<section id="kemiripan-dalam-spesies">
+<h2>Kemiripan Dalam Spesies<a class="headerlink" href="#kemiripan-dalam-spesies" title="Permalink to this heading">#</a></h2>
+<p>Data dengan spesies yang sama (misalnya <em>setosa</em>) memiliki nilai jarak yang relatif kecil. Hal ini menunjukkan bahwa karakteristik bunga dalam satu spesies cenderung homogen.</p>
+</section>
+<section id="perbedaan-antar-spesies">
+<h2>Perbedaan Antar Spesies<a class="headerlink" href="#perbedaan-antar-spesies" title="Permalink to this heading">#</a></h2>
+<p>Data dari spesies berbeda (misalnya <em>setosa</em> dan <em>virginica</em>) memiliki nilai jarak yang lebih besar.</p>
+<p>Atribut yang paling berkontribusi terhadap perbedaan tersebut adalah:</p>
+<ul class="simple">
+<li><p>Petal Length</p></li>
+<li><p>Petal Width</p></li>
+</ul>
+<p>Karena kedua atribut ini memiliki variasi nilai yang signifikan antar spesies.</p>
+</section>
+<section id="visualisasi-distance-map">
+<h2>Visualisasi Distance Map<a class="headerlink" href="#visualisasi-distance-map" title="Permalink to this heading">#</a></h2>
+<p>Pada widget <strong>Distance Map</strong>:
+<img alt="alt text" src="_images/DistanceMap.png" /></p>
+<ul class="simple">
+<li><p>Warna lebih gelap → jarak kecil (lebih mirip)</p></li>
+<li><p>Warna lebih terang → jarak besar (lebih berbeda)</p></li>
+</ul>
+<p>Biasanya terlihat blok gelap di sepanjang diagonal matriks yang menunjukkan adanya pengelompokan alami berdasarkan spesies.</p>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="pengukuran-jarak-pada-data-campuran">
+<h1>Pengukuran Jarak pada Data Campuran<a class="headerlink" href="#pengukuran-jarak-pada-data-campuran" title="Permalink to this heading">#</a></h1>
+<p>Pada bagian ini dibuat contoh data campuran yang terdiri dari atribut numerik, ordinal, dan kategorikal. Metode yang digunakan adalah <strong>Gower Distance</strong> karena mampu menangani berbagai tipe atribut dalam satu perhitungan.</p>
+</section>
+<hr class="docutils" />
+<section class="tex2jax_ignore mathjax_ignore" id="contoh-data-campuran">
+<h1>Contoh Data Campuran<a class="headerlink" href="#contoh-data-campuran" title="Permalink to this heading">#</a></h1>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>ID</p></th>
+<th class="head"><p>Umur (Numerik)</p></th>
+<th class="head"><p>IPK (Numerik)</p></th>
+<th class="head"><p>Semester (Ordinal)</p></th>
+<th class="head"><p>Jurusan (Kategorikal)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>M1</p></td>
+<td><p>20</p></td>
+<td><p>3.50</p></td>
+<td><p>4</p></td>
+<td><p>Informatika</p></td>
+</tr>
+<tr class="row-odd"><td><p>M2</p></td>
+<td><p>22</p></td>
+<td><p>3.80</p></td>
+<td><p>6</p></td>
+<td><p>Sistem Informasi</p></td>
+</tr>
+<tr class="row-even"><td><p>M3</p></td>
+<td><p>21</p></td>
+<td><p>3.20</p></td>
+<td><p>4</p></td>
+<td><p>Informatika</p></td>
+</tr>
+<tr class="row-odd"><td><p>M4</p></td>
+<td><p>23</p></td>
+<td><p>3.60</p></td>
+<td><p>8</p></td>
+<td><p>Teknik Industri</p></td>
+</tr>
+<tr class="row-even"><td><p>M5</p></td>
+<td><p>19</p></td>
+<td><p>3.00</p></td>
+<td><p>2</p></td>
+<td><p>Informatika</p></td>
+</tr>
+<tr class="row-odd"><td><p>M6</p></td>
+<td><p>24</p></td>
+<td><p>3.90</p></td>
+<td><p>8</p></td>
+<td><p>Sistem Informasi</p></td>
+</tr>
+<tr class="row-even"><td><p>M7</p></td>
+<td><p>20</p></td>
+<td><p>3.40</p></td>
+<td><p>4</p></td>
+<td><p>Teknik Industri</p></td>
+</tr>
+<tr class="row-odd"><td><p>M8</p></td>
+<td><p>22</p></td>
+<td><p>3.70</p></td>
+<td><p>6</p></td>
+<td><p>Informatika</p></td>
+</tr>
+<tr class="row-even"><td><p>M9</p></td>
+<td><p>21</p></td>
+<td><p>3.10</p></td>
+<td><p>2</p></td>
+<td><p>Sistem Informasi</p></td>
+</tr>
+<tr class="row-odd"><td><p>M10</p></td>
+<td><p>23</p></td>
+<td><p>3.85</p></td>
+<td><p>8</p></td>
+<td><p>Informatika</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<hr class="docutils" />
+<section class="tex2jax_ignore mathjax_ignore" id="metode-pengukuran-gower-distance">
+<h1>Metode Pengukuran: Gower Distance<a class="headerlink" href="#metode-pengukuran-gower-distance" title="Permalink to this heading">#</a></h1>
+<p>Rumus umum Gower Distance:</p>
+<div class="math notranslate nohighlight">
+\[
+D_{ij} = \frac{\sum_{k=1}^{p} s_{ijk}}{p}
+\]</div>
+<p>Keterangan:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(D_{ij}\)</span> = jarak antara objek <span class="math notranslate nohighlight">\(i\)</span> dan <span class="math notranslate nohighlight">\(j\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(p\)</span> = jumlah atribut</p></li>
+<li><p><span class="math notranslate nohighlight">\(s_{ijk}\)</span> = skor jarak atribut ke-<span class="math notranslate nohighlight">\(k\)</span></p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section class="tex2jax_ignore mathjax_ignore" id="perhitungan-setiap-tipe-atribut">
+<h1>Perhitungan Setiap Tipe Atribut<a class="headerlink" href="#perhitungan-setiap-tipe-atribut" title="Permalink to this heading">#</a></h1>
+<section id="atribut-numerik">
+<h2>1. Atribut Numerik<a class="headerlink" href="#atribut-numerik" title="Permalink to this heading">#</a></h2>
+<p>Untuk atribut numerik digunakan normalisasi:</p>
+<div class="math notranslate nohighlight">
+\[
+s_{ijk} = \frac{|x_{ik} - x_{jk}|}{\text{range}_k}
+\]</div>
+<p>Range dihitung dengan:</p>
+<div class="math notranslate nohighlight">
+\[
+\text{range}_k = \text{max}_k - \text{min}_k
+\]</div>
+</section>
+<hr class="docutils" />
+<section id="atribut-ordinal">
+<h2>2. Atribut Ordinal<a class="headerlink" href="#atribut-ordinal" title="Permalink to this heading">#</a></h2>
+<p>Karena semester bersifat berurutan (2, 4, 6, 8), maka dihitung seperti numerik setelah dinormalisasi.</p>
+</section>
+<hr class="docutils" />
+<section id="atribut-kategorikal">
+<h2>3. Atribut Kategorikal<a class="headerlink" href="#atribut-kategorikal" title="Permalink to this heading">#</a></h2>
+<p>Untuk atribut kategorikal:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+s_{ijk} =
+\begin{cases}
+0, &amp; \text{jika kategori sama} \\
+1, &amp; \text{jika kategori berbeda}
+\end{cases}
+\end{split}\]</div>
+</section>
+</section>
+<hr class="docutils" />
+<section class="tex2jax_ignore mathjax_ignore" id="contoh-perhitungan-jarak-m1-dan-m2">
+<h1>Contoh Perhitungan Jarak M1 dan M2<a class="headerlink" href="#contoh-perhitungan-jarak-m1-dan-m2" title="Permalink to this heading">#</a></h1>
+<section id="langkah-1-hitung-range">
+<h2>Langkah 1: Hitung Range<a class="headerlink" href="#langkah-1-hitung-range" title="Permalink to this heading">#</a></h2>
+<p>Umur:</p>
+<div class="math notranslate nohighlight">
+\[
+24 - 19 = 5
+\]</div>
+<p>IPK:</p>
+<div class="math notranslate nohighlight">
+\[
+3.90 - 3.00 = 0.90
+\]</div>
+<p>Semester:</p>
+<div class="math notranslate nohighlight">
+\[
+8 - 2 = 6
+\]</div>
+</section>
+<hr class="docutils" />
+<section id="langkah-2-hitung-selisih-ternormalisasi">
+<h2>Langkah 2: Hitung Selisih Ternormalisasi<a class="headerlink" href="#langkah-2-hitung-selisih-ternormalisasi" title="Permalink to this heading">#</a></h2>
+<p>Umur:</p>
+<div class="math notranslate nohighlight">
+\[
+\frac{|20 - 22|}{5} = 0.40
+\]</div>
+<p>IPK:</p>
+<div class="math notranslate nohighlight">
+\[
+\frac{|3.50 - 3.80|}{0.90} = 0.33
+\]</div>
+<p>Semester:</p>
+<div class="math notranslate nohighlight">
+\[
+\frac{|4 - 6|}{6} = 0.33
+\]</div>
+<p>Jurusan (Informatika vs Sistem Informasi):</p>
+<div class="math notranslate nohighlight">
+\[
+s = 1
+\]</div>
+</section>
+<hr class="docutils" />
+<section id="langkah-3-hitung-gower-distance">
+<h2>Langkah 3: Hitung Gower Distance<a class="headerlink" href="#langkah-3-hitung-gower-distance" title="Permalink to this heading">#</a></h2>
+<div class="math notranslate nohighlight">
+\[
+D_{M1,M2} = \frac{0.40 + 0.33 + 0.33 + 1}{4}
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+D_{M1,M2} = 0.515
+\]</div>
+</section>
+</section>
+<hr class="docutils" />
+<section class="tex2jax_ignore mathjax_ignore" id="interpretasi-hasil">
+<h1>Interpretasi Hasil<a class="headerlink" href="#interpretasi-hasil" title="Permalink to this heading">#</a></h1>
+<p>Rentang nilai Gower Distance:</p>
+<div class="math notranslate nohighlight">
+\[
+0 \leq D_{ij} \leq 1
+\]</div>
+<ul class="simple">
+<li><p>Nilai mendekati 0 → objek sangat mirip</p></li>
+<li><p>Nilai mendekati 1 → objek sangat berbeda</p></li>
+</ul>
+<p>Nilai 0.515 menunjukkan bahwa M1 dan M2 memiliki tingkat perbedaan sedang.</p>
+</section>
+<hr class="docutils" />
+<section class="tex2jax_ignore mathjax_ignore" id="kesimpulan">
+<h1>Kesimpulan<a class="headerlink" href="#kesimpulan" title="Permalink to this heading">#</a></h1>
+<p>Gower Distance efektif digunakan pada data campuran karena mampu menggabungkan atribut numerik, ordinal, dan kategorikal dalam satu ukuran jarak terintegrasi.</p>
 </section>
 
     <script type="text/x-thebe-config">
@@ -496,6 +864,15 @@ document.write(`
         <p class="prev-next-title">Eksplorasi Data IRIS</p>
       </div>
     </a>
+    <a class="right-next"
+       href="VisualisasiData.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Visualisasi Data IRIS</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
 </div>
                 </footer>
               
@@ -512,10 +889,50 @@ document.write(`
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Describing Data</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#statistik-deskriptif-describe-data">Statistik Deskriptif (Describe Data)</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ukuran-statistik-yang-digunakan">Ukuran Statistik yang Digunakan</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hasil-statistik-deskriptif-dataset-iris">Hasil Statistik Deskriptif Dataset IRIS</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mengukur-jarak-distance-measurement">Mengukur Jarak (Distance Measurement)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mengukur-distance-menggunakan-orange">Mengukur Distance Menggunakan Orange</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#langkah-langkah">Langkah-langkah</a></li>
 </ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#konsep-perhitungan-distance">Konsep Perhitungan Distance</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#euclidean-distance">Euclidean Distance</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#manhattan-distance">Manhattan Distance</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cosine-similarity">Cosine Similarity</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cosine-distance">Cosine Distance</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#output-distance-matrix">Output Distance Matrix</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretasi-hasil-distance">Interpretasi Hasil Distance</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#kemiripan-dalam-spesies">Kemiripan Dalam Spesies</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#perbedaan-antar-spesies">Perbedaan Antar Spesies</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualisasi-distance-map">Visualisasi Distance Map</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#pengukuran-jarak-pada-data-campuran">Pengukuran Jarak pada Data Campuran</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#contoh-data-campuran">Contoh Data Campuran</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#metode-pengukuran-gower-distance">Metode Pengukuran: Gower Distance</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#perhitungan-setiap-tipe-atribut">Perhitungan Setiap Tipe Atribut</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#atribut-numerik">1. Atribut Numerik</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#atribut-ordinal">2. Atribut Ordinal</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#atribut-kategorikal">3. Atribut Kategorikal</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#contoh-perhitungan-jarak-m1-dan-m2">Contoh Perhitungan Jarak M1 dan M2</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#langkah-1-hitung-range">Langkah 1: Hitung Range</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#langkah-2-hitung-selisih-ternormalisasi">Langkah 2: Hitung Selisih Ternormalisasi</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#langkah-3-hitung-gower-distance">Langkah 3: Hitung Gower Distance</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretasi-hasil">Interpretasi Hasil</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#kesimpulan">Kesimpulan</a></li>
+</ul>
+
   </nav></div>
 
 </div></div>
