@@ -1,0 +1,825 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Missing Value &#8212; Penambangan Data</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'MissingValue';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Prediksi Missing Value pada Data ke-40 (KNN Imputation)" href="PrediksiIris.html" />
+    <link rel="prev" title="Visualisasi Data IRIS" href="VisualisasiData.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.png" class="logo__image only-light" alt="Penambangan Data - Home"/>
+    <script>document.write(`<img src="_static/logo.png" class="logo__image only-dark" alt="Penambangan Data - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    Mata Kuliah Penambangan Data
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="DataUnderstanding.html">Memahami Data</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="EksplorasiData.html">Eksplorasi Data IRIS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="DescribeData.html">Describing Data</a></li>
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="VisualisasiData.html">Visualisasi Data IRIS</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="current reference internal" href="#">Missing Value</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="PrediksiIris.html">Prediksi Missing Value pada Data ke-40 (KNN Imputation)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="PrediksiCampuran.html">Prediksi Missing Value Data Kategorikal (KNN Imputation)</a></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2FMissingValue.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/MissingValue.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Missing Value</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#missing-value-dan-prediksi-missing-value-dengan-knn">Missing Value dan Prediksi Missing Value dengan KNN</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Missing Value</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#prediksi-missing-value-dengan-k-nearest-neighbor-knn">Prediksi Missing Value dengan K-Nearest Neighbor (KNN)</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#langkah-1-menghitung-jarak">Langkah 1: Menghitung Jarak</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#langkah-2-menentukan-tetangga-terdekat">Langkah 2: Menentukan Tetangga Terdekat</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hasil-prediksi">Hasil Prediksi</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#kesimpulan">Kesimpulan</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#prediksi-missing-value-menggunakan-knn-di-orange">Prediksi Missing Value Menggunakan KNN di Orange</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#langkah-langkah-di-orange">Langkah-langkah di Orange</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cara-kerja-knn-imputation-di-orange">Cara Kerja KNN Imputation di Orange</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#kelebihan-metode-knn">Kelebihan Metode KNN</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#kekurangan-metode-knn">Kekurangan Metode KNN</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="missing-value">
+<h1>Missing Value<a class="headerlink" href="#missing-value" title="Permalink to this heading">#</a></h1>
+<section id="missing-value-dan-prediksi-missing-value-dengan-knn">
+<h2>Missing Value dan Prediksi Missing Value dengan KNN<a class="headerlink" href="#missing-value-dan-prediksi-missing-value-dengan-knn" title="Permalink to this heading">#</a></h2>
+<section id="id1">
+<h3>Missing Value<a class="headerlink" href="#id1" title="Permalink to this heading">#</a></h3>
+<p>Missing value adalah kondisi ketika suatu data pada dataset tidak memiliki nilai atau bernilai kosong. Hal ini sering terjadi dalam proses pengumpulan data karena berbagai faktor seperti kesalahan pencatatan, data yang tidak lengkap dari responden, kerusakan data, atau proses penggabungan dataset yang tidak sempurna.</p>
+<p>Keberadaan missing value dapat mempengaruhi kualitas analisis data karena beberapa algoritma tidak dapat memproses data yang memiliki nilai kosong. Oleh karena itu, missing value perlu ditangani sebelum dilakukan proses analisis atau pemodelan data.</p>
+<p>Beberapa metode yang umum digunakan untuk menangani missing value antara lain:</p>
+<ul class="simple">
+<li><p><strong>Menghapus data (Deletion)</strong>
+Baris atau kolom yang memiliki nilai kosong dihapus dari dataset.</p></li>
+<li><p><strong>Imputasi menggunakan nilai statistik</strong>
+Nilai kosong diganti dengan nilai rata-rata (mean), median, atau modus.</p></li>
+<li><p><strong>Interpolasi</strong>
+Digunakan pada data runtun waktu untuk memperkirakan nilai yang hilang.</p></li>
+<li><p><strong>Metode berbasis Machine Learning</strong>
+Seperti K-Nearest Neighbor (KNN) untuk memprediksi nilai yang hilang berdasarkan kemiripan data.</p></li>
+</ul>
+</section>
+</section>
+<section id="prediksi-missing-value-dengan-k-nearest-neighbor-knn">
+<h2>Prediksi Missing Value dengan K-Nearest Neighbor (KNN)<a class="headerlink" href="#prediksi-missing-value-dengan-k-nearest-neighbor-knn" title="Permalink to this heading">#</a></h2>
+<p>Salah satu metode yang dapat digunakan untuk mengisi missing value adalah K-Nearest Neighbor (KNN). Metode ini bekerja dengan mencari sejumlah data yang paling mirip dengan data yang memiliki nilai kosong, kemudian memperkirakan nilai tersebut berdasarkan tetangga terdekatnya.</p>
+<p>Prinsip dasar metode KNN adalah bahwa objek yang memiliki karakteristik serupa cenderung memiliki nilai yang mirip.</p>
+<p>Langkah-langkah dalam melakukan imputasi missing value menggunakan KNN adalah sebagai berikut:</p>
+<ol class="arabic simple">
+<li><p>Menentukan nilai parameter 𝑘 yang menunjukkan jumlah tetangga terdekat yang akan digunakan.</p></li>
+<li><p>Menghitung jarak antara data yang memiliki missing value dengan data lainnya.</p></li>
+<li><p>Menentukan 𝑘 data terdekat berdasarkan nilai jarak.</p></li>
+<li><p>Mengisi missing value menggunakan rata-rata (untuk data numerik) atau modus (untuk data kategorikal) dari tetangga terdekat tersebut.</p></li>
+</ol>
+<div class="math notranslate nohighlight">
+\[d(x, y) = \sqrt{\sum_{i=1}^{n}(x_i - y_i)^2}\]</div>
+<p>dimana:
+𝑥 = data yang memiliki missing value
+𝑦 = data pembanding
+𝑛 = jumlah atribut</p>
+<p><strong>Contoh Sederhana</strong></p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Data</p></th>
+<th class="head"><p>Umur</p></th>
+<th class="head"><p>Penghasilan</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>A</p></td>
+<td><p>20</p></td>
+<td><p>2.5</p></td>
+</tr>
+<tr class="row-odd"><td><p>B</p></td>
+<td><p>21</p></td>
+<td><p>2.7</p></td>
+</tr>
+<tr class="row-even"><td><p>C</p></td>
+<td><p>22</p></td>
+<td><p>?</p></td>
+</tr>
+<tr class="row-odd"><td><p>D</p></td>
+<td><p>23</p></td>
+<td><p>3.0</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Nilai penghasilan pada data C tidak diketahui sehingga perlu diprediksi menggunakan metode KNN.</p>
+<p>Misalkan digunakan:
+$<span class="math notranslate nohighlight">\(𝑘 = 2 \)</span>$ artinya kita akan menggunakan 2 tetangga terdekat.</p>
+<section id="langkah-1-menghitung-jarak">
+<h3>Langkah 1: Menghitung Jarak<a class="headerlink" href="#langkah-1-menghitung-jarak" title="Permalink to this heading">#</a></h3>
+<p>Karena atribut yang tersedia adalah <strong>Umur</strong>, maka jarak dapat dihitung menggunakan <strong>Euclidean Distance</strong>.</p>
+<p>Rumus Euclidean Distance:</p>
+<div class="math notranslate nohighlight">
+\[d(x, y) = \sqrt{(x - y)^2}\]</div>
+<hr class="docutils" />
+<p><strong>Jarak antara C dan A</strong></p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+d(C, A) &amp;= \sqrt{(22 - 20)^2} \\
+d(C, A) &amp;= \sqrt{4} \\
+d(C, A) &amp;= 2
+\end{aligned}
+\end{split}\]</div>
+<hr class="docutils" />
+<p><strong>Jarak antara C dan B</strong></p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+d(C, B) &amp;= \sqrt{(22 - 21)^2} \\
+d(C, B) &amp;= \sqrt{1} \\
+d(C, B) &amp;= 1
+\end{aligned}
+\end{split}\]</div>
+<p><strong>Jarak antara C dan D</strong></p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+d(C, D) &amp;= \sqrt{(22 - 23)^2} \\
+d(C, D) &amp;= \sqrt{1} \\
+d(C, D) &amp;= 1
+\end{aligned}
+\end{split}\]</div>
+<hr class="docutils" />
+<p><strong>Jarak antara C dan E</strong></p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+d(C, E) &amp;= \sqrt{(22 - 24)^2} \\
+d(C, E) &amp;= \sqrt{4} \\
+d(C, E) &amp;= 2
+\end{aligned}
+\end{split}\]</div>
+</section>
+<hr class="docutils" />
+<section id="langkah-2-menentukan-tetangga-terdekat">
+<h3>Langkah 2: Menentukan Tetangga Terdekat<a class="headerlink" href="#langkah-2-menentukan-tetangga-terdekat" title="Permalink to this heading">#</a></h3>
+<p>Urutan jarak terkecil:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Data</p></th>
+<th class="head text-left"><p>Jarak</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>B</p></td>
+<td class="text-left"><p>1</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>D</p></td>
+<td class="text-left"><p>1</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>A</p></td>
+<td class="text-left"><p>2</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>E</p></td>
+<td class="text-left"><p>2</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Karena:</p>
+<div class="math notranslate nohighlight">
+\[k = 2\]</div>
+<p>maka dua tetangga terdekat adalah:</p>
+<ul class="simple">
+<li><p>B</p></li>
+<li><p>D</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="hasil-prediksi">
+<h3>Hasil Prediksi<a class="headerlink" href="#hasil-prediksi" title="Permalink to this heading">#</a></h3>
+<p>Nilai penghasilan yang hilang pada data <strong>C</strong> diperkirakan sebesar:</p>
+<div class="math notranslate nohighlight">
+\[2.85\]</div>
+<p>Sehingga dataset menjadi:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Data</p></th>
+<th class="head text-left"><p>Umur</p></th>
+<th class="head text-left"><p>Penghasilan</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>A</p></td>
+<td class="text-left"><p>20</p></td>
+<td class="text-left"><p>2.5</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>B</p></td>
+<td class="text-left"><p>21</p></td>
+<td class="text-left"><p>2.7</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>C</p></td>
+<td class="text-left"><p>22</p></td>
+<td class="text-left"><p>2.85</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>D</p></td>
+<td class="text-left"><p>23</p></td>
+<td class="text-left"><p>3.0</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>E</p></td>
+<td class="text-left"><p>24</p></td>
+<td class="text-left"><p>3.2</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="kesimpulan">
+<h3>Kesimpulan<a class="headerlink" href="#kesimpulan" title="Permalink to this heading">#</a></h3>
+<p>Missing value merupakan permasalahan umum dalam pengolahan data yang dapat mempengaruhi hasil analisis. Salah satu metode yang efektif untuk mengatasi missing value adalah metode K-Nearest Neighbor (KNN), yang memanfaatkan kemiripan antar data untuk memperkirakan nilai yang hilang. Dengan pendekatan ini, nilai yang diprediksi menjadi lebih representatif karena didasarkan pada pola data yang ada.</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="prediksi-missing-value-menggunakan-knn-di-orange">
+<h2>Prediksi Missing Value Menggunakan KNN di Orange<a class="headerlink" href="#prediksi-missing-value-menggunakan-knn-di-orange" title="Permalink to this heading">#</a></h2>
+<p>Pada aplikasi <strong>Orange Data Mining</strong>, missing value dapat diprediksi menggunakan metode <strong>KNN Imputation</strong> melalui widget <strong>Impute</strong>.</p>
+<section id="langkah-langkah-di-orange">
+<h3>Langkah-langkah di Orange<a class="headerlink" href="#langkah-langkah-di-orange" title="Permalink to this heading">#</a></h3>
+<p><strong>1 Import Dataset</strong></p>
+<p>Gunakan widget:</p>
+<p><code class="docutils literal notranslate"><span class="pre">File</span></code></p>
+<p>untuk memasukkan dataset yang memiliki missing value.</p>
+<hr class="docutils" />
+<p><strong>2 Tampilkan Data</strong></p>
+<p>Hubungkan ke widget:</p>
+<p><code class="docutils literal notranslate"><span class="pre">Data</span> <span class="pre">Table</span></code></p>
+<p>untuk melihat apakah terdapat nilai yang hilang (biasanya ditandai dengan tanda ?).</p>
+<hr class="docutils" />
+<p><strong>3 Gunakan Widget Impute</strong></p>
+<p>Tambahkan widget:</p>
+<p><code class="docutils literal notranslate"><span class="pre">Impute</span></code></p>
+<p>Widget ini digunakan untuk mengisi missing value.</p>
+<hr class="docutils" />
+<p><strong>4 Pilih Metode KNN</strong></p>
+<p>Pada pengaturan <strong>Impute</strong>, pilih metode:</p>
+<p><code class="docutils literal notranslate"><span class="pre">KNN</span> <span class="pre">Imputation</span></code></p>
+<p>Parameter yang dapat diatur:</p>
+<ul class="simple">
+<li><p><strong>Number of Neighbors (k)</strong> → jumlah tetangga yang digunakan</p></li>
+<li><p><strong>Distance Measure</strong> → metode perhitungan jarak</p></li>
+<li><p><strong>Weighting</strong> → bobot berdasarkan jarak</p></li>
+</ul>
+<hr class="docutils" />
+<p><strong>5 Hubungkan ke Data Table</strong></p>
+<p>Hubungkan output <strong>Impute</strong> → <strong>Data Table</strong> untuk melihat hasil data setelah missing value diisi.</p>
+</section>
+<hr class="docutils" />
+<section id="cara-kerja-knn-imputation-di-orange">
+<h3>Cara Kerja KNN Imputation di Orange<a class="headerlink" href="#cara-kerja-knn-imputation-di-orange" title="Permalink to this heading">#</a></h3>
+<p>Proses yang dilakukan Orange adalah:</p>
+<ol class="arabic simple">
+<li><p>Mendeteksi data yang memiliki missing value.</p></li>
+<li><p>Menghitung jarak antara data tersebut dengan data lainnya.</p></li>
+<li><p>Menentukan <strong>k tetangga terdekat</strong>.</p></li>
+<li><p>Mengisi nilai yang hilang menggunakan:</p>
+<ul class="simple">
+<li><p><strong>rata-rata</strong> (mean) untuk data numerik</p></li>
+<li><p><strong>modus</strong> untuk data kategorikal.</p></li>
+</ul>
+</li>
+</ol>
+</section>
+<hr class="docutils" />
+<section id="kelebihan-metode-knn">
+<h3>Kelebihan Metode KNN<a class="headerlink" href="#kelebihan-metode-knn" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Tidak menghapus data yang memiliki missing value.</p></li>
+<li><p>Memanfaatkan pola kemiripan antar data.</p></li>
+<li><p>Lebih akurat dibanding imputasi sederhana seperti mean.</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="kekurangan-metode-knn">
+<h3>Kekurangan Metode KNN<a class="headerlink" href="#kekurangan-metode-knn" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Membutuhkan waktu komputasi lebih besar pada dataset besar.</p></li>
+<li><p>Sensitif terhadap pemilihan nilai k.</p></li>
+<li><p>Hasil dapat dipengaruhi oleh outlier.</p></li>
+</ul>
+</section>
+</section>
+<div class="toctree-wrapper compound">
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="VisualisasiData.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Visualisasi Data IRIS</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="PrediksiIris.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Prediksi Missing Value pada Data ke-40 (KNN Imputation)</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#missing-value-dan-prediksi-missing-value-dengan-knn">Missing Value dan Prediksi Missing Value dengan KNN</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Missing Value</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#prediksi-missing-value-dengan-k-nearest-neighbor-knn">Prediksi Missing Value dengan K-Nearest Neighbor (KNN)</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#langkah-1-menghitung-jarak">Langkah 1: Menghitung Jarak</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#langkah-2-menentukan-tetangga-terdekat">Langkah 2: Menentukan Tetangga Terdekat</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hasil-prediksi">Hasil Prediksi</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#kesimpulan">Kesimpulan</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#prediksi-missing-value-menggunakan-knn-di-orange">Prediksi Missing Value Menggunakan KNN di Orange</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#langkah-langkah-di-orange">Langkah-langkah di Orange</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cara-kerja-knn-imputation-di-orange">Cara Kerja KNN Imputation di Orange</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#kelebihan-metode-knn">Kelebihan Metode KNN</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#kekurangan-metode-knn">Kekurangan Metode KNN</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Rifqi Fairurrafi
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Content with notebooks &#8212; Penambangan Data</title>
+    <title>Prediksi Missing Value Data Kategorikal (KNN Imputation) &#8212; Penambangan Data</title>
   
   
   
@@ -64,11 +64,10 @@ const thebe_selector_output = ".output, .cell_output"
     <script async="async" src="_static/sphinx-thebe.js"></script>
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'PrediksiCampuran';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Notebooks with MyST Markdown" href="markdown-notebooks.html" />
-    <link rel="prev" title="Markdown Files" href="markdown.html" />
+    <link rel="prev" title="Prediksi Missing Value pada Data ke-40 (KNN Imputation)" href="PrediksiIris.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -176,9 +175,25 @@ const thebe_selector_output = ".output, .cell_output"
             </li>
         </ul>
         <ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="markdown.html">Markdown Files</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Content with notebooks</a></li>
-<li class="toctree-l1"><a class="reference internal" href="markdown-notebooks.html">Notebooks with MyST Markdown</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="DataUnderstanding.html">Memahami Data</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="EksplorasiData.html">Eksplorasi Data IRIS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="DescribeData.html">Describing Data</a></li>
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="VisualisasiData.html">Visualisasi Data IRIS</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="MissingValue.html">Missing Value</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="PrediksiIris.html">Prediksi Missing Value pada Data ke-40 (KNN Imputation)</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Prediksi Missing Value Data Kategorikal (KNN Imputation)</a></li>
+</ul>
+</details></li>
 </ul>
 
     </div>
@@ -250,7 +265,7 @@ const thebe_selector_output = ".output, .cell_output"
       
       
       
-      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2Fnotebooks.html&body=Your%20issue%20content%20here." target="_blank"
+      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2FPrediksiCampuran.html&body=Your%20issue%20content%20here." target="_blank"
    class="btn btn-sm btn-source-issues-button dropdown-item"
    title="Open an issue"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -280,7 +295,7 @@ const thebe_selector_output = ".output, .cell_output"
       
       
       
-      <li><a href="_sources/notebooks.ipynb" target="_blank"
+      <li><a href="_sources/PrediksiCampuran.md" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -290,7 +305,7 @@ const thebe_selector_output = ".output, .cell_output"
 <span class="btn__icon-container">
   <i class="fas fa-file"></i>
   </span>
-<span class="btn__text-container">.ipynb</span>
+<span class="btn__text-container">.md</span>
 </a>
 </li>
       
@@ -364,7 +379,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Content with notebooks</h1>
+    <h1>Prediksi Missing Value Data Kategorikal (KNN Imputation)</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -374,9 +389,9 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#markdown-notebooks">Markdown + notebooks</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#myst-markdown">MyST markdown</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#code-blocks-and-outputs">Code blocks and outputs</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#menghitung-jarak-euclidean">1. Menghitung Jarak Euclidean</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#menentukan-k-tetangga-terdekat">2. Menentukan <span class="math notranslate nohighlight">\(k\)</span> Tetangga Terdekat</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#menghitung-nilai-prediksi-modus">3. Menghitung Nilai Prediksi (Modus)</a></li>
 </ul>
             </nav>
         </div>
@@ -388,87 +403,147 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="content-with-notebooks">
-<h1>Content with notebooks<a class="headerlink" href="#content-with-notebooks" title="Permalink to this heading">#</a></h1>
-<p>You can also create content with Jupyter Notebooks. This means that you can include
-code blocks and their outputs in your book.</p>
-<section id="markdown-notebooks">
-<h2>Markdown + notebooks<a class="headerlink" href="#markdown-notebooks" title="Permalink to this heading">#</a></h2>
-<p>As it is markdown, you can embed images, HTML, etc into your posts!</p>
-<p><img alt="" src="https://myst-parser.readthedocs.io/en/latest/_static/logo-wide.svg" /></p>
-<p>You can also <span class="math notranslate nohighlight">\(add_{math}\)</span> and</p>
-<div class="math notranslate nohighlight">
-\[
-math^{blocks}
-\]</div>
-<p>or</p>
+  <section class="tex2jax_ignore mathjax_ignore" id="prediksi-missing-value-data-kategorikal-knn-imputation">
+<h1>Prediksi Missing Value Data Kategorikal (KNN Imputation)<a class="headerlink" href="#prediksi-missing-value-data-kategorikal-knn-imputation" title="Permalink to this heading">#</a></h1>
+<p>Diberikan sebuah dataset campuran yang berisi informasi mahasiswa sebagai berikut:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-center"><p>ID</p></th>
+<th class="head text-center"><p>Umur (Numerik)</p></th>
+<th class="head text-center"><p>IPK (Numerik)</p></th>
+<th class="head text-center"><p>Semester (Ordinal)</p></th>
+<th class="head text-left"><p>Jurusan (Kategorikal)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-center"><p>M1</p></td>
+<td class="text-center"><p>20</p></td>
+<td class="text-center"><p>3.50</p></td>
+<td class="text-center"><p>4</p></td>
+<td class="text-left"><p>Informatika</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>M2</p></td>
+<td class="text-center"><p>22</p></td>
+<td class="text-center"><p>3.80</p></td>
+<td class="text-center"><p>6</p></td>
+<td class="text-left"><p>Sistem Informasi</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p>M3</p></td>
+<td class="text-center"><p>21</p></td>
+<td class="text-center"><p>3.20</p></td>
+<td class="text-center"><p>4</p></td>
+<td class="text-left"><p>Informatika</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p><strong>M4</strong></p></td>
+<td class="text-center"><p><strong>23</strong></p></td>
+<td class="text-center"><p><strong>3.60</strong></p></td>
+<td class="text-center"><p><strong>8</strong></p></td>
+<td class="text-left"><p><strong>?</strong> <em>(Missing Value)</em></p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p>M5</p></td>
+<td class="text-center"><p>19</p></td>
+<td class="text-center"><p>3.00</p></td>
+<td class="text-center"><p>2</p></td>
+<td class="text-left"><p>Informatika</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>M6</p></td>
+<td class="text-center"><p>24</p></td>
+<td class="text-center"><p>3.90</p></td>
+<td class="text-center"><p>8</p></td>
+<td class="text-left"><p>Sistem Informasi</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p>M7</p></td>
+<td class="text-center"><p>20</p></td>
+<td class="text-center"><p>3.40</p></td>
+<td class="text-center"><p>4</p></td>
+<td class="text-left"><p>Teknik Industri</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>M8</p></td>
+<td class="text-center"><p>22</p></td>
+<td class="text-center"><p>3.70</p></td>
+<td class="text-center"><p>6</p></td>
+<td class="text-left"><p>Informatika</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p>M9</p></td>
+<td class="text-center"><p>21</p></td>
+<td class="text-center"><p>3.10</p></td>
+<td class="text-center"><p>2</p></td>
+<td class="text-left"><p>Sistem Informasi</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>M10</p></td>
+<td class="text-center"><p>23</p></td>
+<td class="text-center"><p>3.85</p></td>
+<td class="text-center"><p>8</p></td>
+<td class="text-left"><p>Informatika</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Sebagai contoh kasus, diasumsikan mahasiswa dengan <strong>ID M4</strong> memiliki <em>missing value</em> pada atribut <strong>Jurusan</strong>. Karena target prediksinya (Jurusan) adalah data kategorikal, KNN tidak akan menggunakan nilai rata-rata, melainkan menggunakan nilai <strong>Modus</strong> (kelas yang paling sering muncul) dari tetangga terdekatnya.</p>
+<section id="menghitung-jarak-euclidean">
+<h2>1. Menghitung Jarak Euclidean<a class="headerlink" href="#menghitung-jarak-euclidean" title="Permalink to this heading">#</a></h2>
+<p>Sistem menghitung jarak antara data M4 dengan seluruh data mahasiswa lainnya menggunakan atribut numerik yang tersedia (<code class="docutils literal notranslate"><span class="pre">Umur</span></code>, <code class="docutils literal notranslate"><span class="pre">IPK</span></code>, dan <code class="docutils literal notranslate"><span class="pre">Semester</span></code>).</p>
+<p>Sebagai contoh, berikut adalah perhitungan jarak antara M4 dengan M10:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
 \begin{aligned}
-\mbox{mean} la_{tex} \\ \\
-math blocks
+d(M4, M10) &amp;= \sqrt{(23 - 23)^2 + (3.60 - 3.85)^2 + (8 - 8)^2} \\
+d(M4, M10) &amp;= \sqrt{0 + (-0.25)^2 + 0} \\
+d(M4, M10) &amp;= \sqrt{0.0625} \\
+d(M4, M10) &amp;= 0.250
 \end{aligned}
 \end{split}\]</div>
-<p>But make sure you $Escape $your $dollar signs $you want to keep!</p>
+<p>Dengan cara yang sama, jarak Euclidean dari M4 ke seluruh data lainnya dihitung untuk mencari data yang paling mirip.</p>
 </section>
-<section id="myst-markdown">
-<h2>MyST markdown<a class="headerlink" href="#myst-markdown" title="Permalink to this heading">#</a></h2>
-<p>MyST markdown works in Jupyter Notebooks as well. For more information about MyST markdown, check
-out <a class="reference external" href="https://jupyterbook.org/content/myst.html">the MyST guide in Jupyter Book</a>,
-or see <a class="reference external" href="https://myst-parser.readthedocs.io/en/latest/">the MyST markdown documentation</a>.</p>
+<section id="menentukan-k-tetangga-terdekat">
+<h2>2. Menentukan <span class="math notranslate nohighlight">\(k\)</span> Tetangga Terdekat<a class="headerlink" href="#menentukan-k-tetangga-terdekat" title="Permalink to this heading">#</a></h2>
+<p>Jika kita menetapkan parameter jumlah tetangga <span class="math notranslate nohighlight">\(k = 5\)</span>, sistem akan mengurutkan dan mengambil 5 data mahasiswa dengan jarak terkecil (terdekat) dari M4. Berdasarkan hasil perhitungan matematika, 5 tetangga terdekatnya adalah:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-center"><p>Urutan</p></th>
+<th class="head text-center"><p>ID Data</p></th>
+<th class="head text-left"><p>Jarak Euclidean</p></th>
+<th class="head text-left"><p>Nilai <code class="docutils literal notranslate"><span class="pre">Jurusan</span></code></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-center"><p>1</p></td>
+<td class="text-center"><p>M10</p></td>
+<td class="text-left"><p>0.250</p></td>
+<td class="text-left"><p>Informatika</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>2</p></td>
+<td class="text-center"><p>M6</p></td>
+<td class="text-left"><p>1.044</p></td>
+<td class="text-left"><p>Sistem Informasi</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p>3</p></td>
+<td class="text-center"><p>M8</p></td>
+<td class="text-left"><p>2.238</p></td>
+<td class="text-left"><p>Informatika</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>4</p></td>
+<td class="text-center"><p>M2</p></td>
+<td class="text-left"><p>2.245</p></td>
+<td class="text-left"><p>Sistem Informasi</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p>5</p></td>
+<td class="text-center"><p>M3</p></td>
+<td class="text-left"><p>4.490</p></td>
+<td class="text-left"><p>Informatika</p></td>
+</tr>
+</tbody>
+</table>
+</div>
 </section>
-<section id="code-blocks-and-outputs">
-<h2>Code blocks and outputs<a class="headerlink" href="#code-blocks-and-outputs" title="Permalink to this heading">#</a></h2>
-<p>Jupyter Book will also embed your code blocks and output in your book.
-For example, here’s some sample Matplotlib code:</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">rcParams</span><span class="p">,</span> <span class="n">cycler</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ion</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">rcParams</span><span class="p">,</span> <span class="n">cycler</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-
-<span class="ne">ModuleNotFoundError</span>: No module named &#39;matplotlib&#39;
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Fixing random state for reproducibility</span>
-<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">19680801</span><span class="p">)</span>
-
-<span class="n">N</span> <span class="o">=</span> <span class="mi">10</span>
-<span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">logspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span> <span class="o">+</span> <span class="n">ii</span> <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">)]</span>
-<span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
-<span class="n">cmap</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">coolwarm</span>
-<span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;axes.prop_cycle&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cycler</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="n">cmap</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">N</span><span class="p">)))</span>
-
-
-<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib.lines</span><span class="w"> </span><span class="kn">import</span> <span class="n">Line2D</span>
-<span class="n">custom_lines</span> <span class="o">=</span> <span class="p">[</span><span class="n">Line2D</span><span class="p">([</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">cmap</span><span class="p">(</span><span class="mf">0.</span><span class="p">),</span> <span class="n">lw</span><span class="o">=</span><span class="mi">4</span><span class="p">),</span>
-                <span class="n">Line2D</span><span class="p">([</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">cmap</span><span class="p">(</span><span class="mf">.5</span><span class="p">),</span> <span class="n">lw</span><span class="o">=</span><span class="mi">4</span><span class="p">),</span>
-                <span class="n">Line2D</span><span class="p">([</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">cmap</span><span class="p">(</span><span class="mf">1.</span><span class="p">),</span> <span class="n">lw</span><span class="o">=</span><span class="mi">4</span><span class="p">)]</span>
-
-<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
-<span class="n">lines</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">custom_lines</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;Cold&#39;</span><span class="p">,</span> <span class="s1">&#39;Medium&#39;</span><span class="p">,</span> <span class="s1">&#39;Hot&#39;</span><span class="p">]);</span>
-</pre></div>
-</div>
-</div>
-</div>
-<p>There is a lot more that you can do with outputs (such as including interactive outputs)
-with your book. For more information about this, see <a class="reference external" href="https://jupyterbook.org">the Jupyter Book documentation</a></p>
+<section id="menghitung-nilai-prediksi-modus">
+<h2>3. Menghitung Nilai Prediksi (Modus)<a class="headerlink" href="#menghitung-nilai-prediksi-modus" title="Permalink to this heading">#</a></h2>
+<p>Karena kolom <code class="docutils literal notranslate"><span class="pre">Jurusan</span></code> merupakan data kategorikal, nilai <em>missing value</em> pada M4 akan diisi menggunakan kelas mayoritas atau <strong>Modus</strong> dari kelima tetangga terdekat tersebut:</p>
+<ul class="simple">
+<li><p><strong>Informatika</strong>: Muncul 3 kali (pada M10, M8, M3)</p></li>
+<li><p><strong>Sistem Informasi</strong>: Muncul 2 kali (pada M6, M2)</p></li>
+</ul>
+<p><strong>Hasil Prediksi:</strong> Karena “Informatika” adalah jurusan yang paling dominan muncul di antara tetangga terdekatnya, maka <em>missing value</em> pada atribut Jurusan milik data <strong>M4</strong> diprediksi dan diisi dengan <strong>Informatika</strong>.</p>
 </section>
 </section>
 
@@ -503,22 +578,13 @@ with your book. For more information about this, see <a class="reference externa
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="markdown.html"
+       href="PrediksiIris.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Markdown Files</p>
+        <p class="prev-next-title">Prediksi Missing Value pada Data ke-40 (KNN Imputation)</p>
       </div>
-    </a>
-    <a class="right-next"
-       href="markdown-notebooks.html"
-       title="next page">
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Notebooks with MyST Markdown</p>
-      </div>
-      <i class="fa-solid fa-angle-right"></i>
     </a>
 </div>
                 </footer>
@@ -536,9 +602,9 @@ with your book. For more information about this, see <a class="reference externa
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#markdown-notebooks">Markdown + notebooks</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#myst-markdown">MyST markdown</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#code-blocks-and-outputs">Code blocks and outputs</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#menghitung-jarak-euclidean">1. Menghitung Jarak Euclidean</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#menentukan-k-tetangga-terdekat">2. Menentukan <span class="math notranslate nohighlight">\(k\)</span> Tetangga Terdekat</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#menghitung-nilai-prediksi-modus">3. Menghitung Nilai Prediksi (Modus)</a></li>
 </ul>
   </nav></div>
 
