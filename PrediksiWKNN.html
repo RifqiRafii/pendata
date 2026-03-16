@@ -392,14 +392,15 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dataset">Dataset</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#perhitungan-manual-wknn">Perhitungan Manual WKNN</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#menghitung-jarak-euclidean">1. Menghitung Jarak Euclidean</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#menghitung-bobot-weight">2. Menghitung Bobot (Weight)</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#menghitung-nilai-prediksi">3. Menghitung Nilai Prediksi</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dataset">1. Dataset</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#perhitungan-manual-wknn">2. Perhitungan Manual WKNN</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#langkah-a-normalisasi-min-max">Langkah A: Normalisasi (Min-Max)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#langkah-b-menghitung-jarak-euclidean">Langkah B: Menghitung Jarak Euclidean</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#langkah-c-menghitung-bobot-nilai-prediksi">Langkah C: Menghitung Bobot &amp; Nilai Prediksi</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#implementasi-dengan-python-sklearn">Implementasi dengan Python (Sklearn)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#implementasi-dengan-python-sklearn">3. Implementasi dengan Python (Sklearn)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#implementasi-wknn-di-orange-data-mining">Implementasi WKNN di Orange Data Mining</a></li>
 </ul>
             </nav>
         </div>
@@ -413,49 +414,53 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="prediksi-missing-value-dengan-wknn">
 <h1>Prediksi Missing Value dengan WKNN<a class="headerlink" href="#prediksi-missing-value-dengan-wknn" title="Permalink to this heading">#</a></h1>
-<p>Selain algoritma KNN standar, terdapat varian yang lebih tingkat lanjut yaitu <strong>WKNN (Weighted K-Nearest Neighbors)</strong>. WKNN memberikan “bobot” (<em>weight</em>) pada setiap tetangga berdasarkan jaraknya. Tetangga yang jaraknya lebih dekat akan memiliki pengaruh (bobot) yang lebih besar terhadap hasil prediksi dibandingkan tetangga yang letaknya lebih jauh.</p>
+<p>Algoritma <strong>WKNN (Weighted K-Nearest Neighbors)</strong> adalah pengembangan dari kNN di mana setiap tetangga diberikan “bobot” (<em>weight</em>) berdasarkan kedekatan jaraknya. Tetangga yang lokasinya lebih dekat akan memiliki pengaruh lebih besar dalam menentukan hasil akhir prediksi dibandingkan tetangga yang jauh.</p>
 <section id="dataset">
-<h2>Dataset<a class="headerlink" href="#dataset" title="Permalink to this heading">#</a></h2>
-<p>Diberikan sebuah dataset uji coba dengan tiga variabel independen (<span class="math notranslate nohighlight">\(X_1, X_2, X_3\)</span>) dan satu variabel dependen (<span class="math notranslate nohighlight">\(Y\)</span>). Terdapat <em>missing value</em> pada data <strong>T3</strong>.</p>
+<h2>1. Dataset<a class="headerlink" href="#dataset" title="Permalink to this heading">#</a></h2>
+<p>Berikut adalah dataset yang digunakan (diambil dari file <code class="docutils literal notranslate"><span class="pre">tugasWKNN.csv</span></code>). Terdapat <em>missing value</em> pada data ke-7 (<strong>T7</strong>) di kolom <strong>JML</strong>.</p>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
 <tr class="row-odd"><th class="head text-center"><p>Data</p></th>
-<th class="head text-center"><p>X1</p></th>
-<th class="head text-center"><p>X2</p></th>
-<th class="head text-center"><p>X3</p></th>
-<th class="head text-center"><p>Y</p></th>
+<th class="head text-center"><p>IPK</p></th>
+<th class="head text-center"><p>PO</p></th>
+<th class="head text-center"><p>JML</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td class="text-center"><p>T1</p></td>
-<td class="text-center"><p>3</p></td>
-<td class="text-center"><p>5</p></td>
-<td class="text-center"><p>4</p></td>
-<td class="text-center"><p>10</p></td>
+<td class="text-center"><p>2</p></td>
+<td class="text-center"><p>2.000.000</p></td>
+<td class="text-center"><p>2.0</p></td>
 </tr>
 <tr class="row-odd"><td class="text-center"><p>T2</p></td>
-<td class="text-center"><p>2</p></td>
-<td class="text-center"><p>1</p></td>
-<td class="text-center"><p>2</p></td>
-<td class="text-center"><p>5</p></td>
+<td class="text-center"><p>3</p></td>
+<td class="text-center"><p>3.000.000</p></td>
+<td class="text-center"><p>3.0</p></td>
 </tr>
-<tr class="row-even"><td class="text-center"><p><strong>T3</strong></p></td>
-<td class="text-center"><p><strong>5</strong></p></td>
-<td class="text-center"><p><strong>4</strong></p></td>
-<td class="text-center"><p><strong>6</strong></p></td>
-<td class="text-center"><p><strong>?</strong></p></td>
+<tr class="row-even"><td class="text-center"><p>T3</p></td>
+<td class="text-center"><p>4</p></td>
+<td class="text-center"><p>2.000.000</p></td>
+<td class="text-center"><p>2.0</p></td>
 </tr>
 <tr class="row-odd"><td class="text-center"><p>T4</p></td>
-<td class="text-center"><p>1</p></td>
 <td class="text-center"><p>2</p></td>
-<td class="text-center"><p>3</p></td>
-<td class="text-center"><p>6</p></td>
+<td class="text-center"><p>2.000.000</p></td>
+<td class="text-center"><p>3.0</p></td>
 </tr>
 <tr class="row-even"><td class="text-center"><p>T5</p></td>
+<td class="text-center"><p>3</p></td>
+<td class="text-center"><p>3.000.000</p></td>
+<td class="text-center"><p>2.0</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>T6</p></td>
 <td class="text-center"><p>4</p></td>
-<td class="text-center"><p>6</p></td>
-<td class="text-center"><p>5</p></td>
-<td class="text-center"><p>12</p></td>
+<td class="text-center"><p>4.000.000</p></td>
+<td class="text-center"><p>3.0</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p><strong>T7</strong></p></td>
+<td class="text-center"><p><strong>2</strong></p></td>
+<td class="text-center"><p><strong>3.000.000</strong></p></td>
+<td class="text-center"><p><strong>?</strong></p></td>
 </tr>
 </tbody>
 </table>
@@ -463,58 +468,109 @@ document.write(`
 </section>
 <hr class="docutils" />
 <section id="perhitungan-manual-wknn">
-<h2>Perhitungan Manual WKNN<a class="headerlink" href="#perhitungan-manual-wknn" title="Permalink to this heading">#</a></h2>
-<p>Untuk mendemonstrasikan cara kerja WKNN secara matematis dengan lebih mudah dipahami, kita akan melakukan perhitungan manual <strong>tanpa normalisasi</strong> menggunakan parameter <span class="math notranslate nohighlight">\(k = 3\)</span>.</p>
-<section id="menghitung-jarak-euclidean">
-<h3>1. Menghitung Jarak Euclidean<a class="headerlink" href="#menghitung-jarak-euclidean" title="Permalink to this heading">#</a></h3>
-<p>Sistem menghitung jarak antara target <strong>T3</strong> dengan seluruh data lainnya menggunakan rumus Euclidean:</p>
+<h2>2. Perhitungan Manual WKNN<a class="headerlink" href="#perhitungan-manual-wknn" title="Permalink to this heading">#</a></h2>
+<p>Mengingat rentang kolom <strong>PO</strong> sangat besar (jutaan) dibandingkan <strong>IPK</strong> (satuan), maka kita <strong>wajib menormalisasi data</strong> terlebih dahulu agar jarak komputasinya seimbang dan tidak didominasi oleh kolom PO.</p>
+<section id="langkah-a-normalisasi-min-max">
+<h3>Langkah A: Normalisasi (Min-Max)<a class="headerlink" href="#langkah-a-normalisasi-min-max" title="Permalink to this heading">#</a></h3>
+<p>Kita akan mengubah skala nilai menggunakan rumus <em>Min-Max Normalization</em>:</p>
 <div class="math notranslate nohighlight">
-\[d(x, y) = \sqrt{\sum_{i=1}^{n}(x_i - y_i)^2}\]</div>
+\[v' = \frac{v - \min}{\max - \min}\]</div>
 <ul class="simple">
-<li><p><strong>Jarak ke T1:</strong>
-$<span class="math notranslate nohighlight">\(d(T3, T1) = \sqrt{(5-3)^2 + (4-5)^2 + (6-4)^2} = \sqrt{4 + 1 + 4} = \sqrt{9} = 3\)</span>$</p></li>
-<li><p><strong>Jarak ke T2:</strong>
-$<span class="math notranslate nohighlight">\(d(T3, T2) = \sqrt{(5-2)^2 + (4-1)^2 + (6-2)^2} = \sqrt{9 + 9 + 16} = \sqrt{34} \approx 5.83\)</span>$</p></li>
-<li><p><strong>Jarak ke T4:</strong>
-$<span class="math notranslate nohighlight">\(d(T3, T4) = \sqrt{(5-1)^2 + (4-2)^2 + (6-3)^2} = \sqrt{16 + 4 + 9} = \sqrt{29} \approx 5.385\)</span>$</p></li>
-<li><p><strong>Jarak ke T5:</strong>
-$<span class="math notranslate nohighlight">\(d(T3, T5) = \sqrt{(5-4)^2 + (4-6)^2 + (6-5)^2} = \sqrt{1 + 4 + 1} = \sqrt{6} \approx 2.45\)</span>$</p></li>
+<li><p>Untuk <strong>IPK</strong>: <span class="math notranslate nohighlight">\(\min = 2, \max = 4\)</span></p></li>
+<li><p>Untuk <strong>PO</strong>: <span class="math notranslate nohighlight">\(\min = 2.000.000, \max = 4.000.000\)</span></p></li>
 </ul>
-<p>Karena kita menggunakan parameter <span class="math notranslate nohighlight">\(k = 3\)</span>, kita ambil 3 data dengan jarak terdekat, yaitu: <strong>T5 (2.45)</strong>, <strong>T1 (3)</strong>, dan <strong>T4 (5.385)</strong>.</p>
-</section>
-<section id="menghitung-bobot-weight">
-<h3>2. Menghitung Bobot (Weight)<a class="headerlink" href="#menghitung-bobot-weight" title="Permalink to this heading">#</a></h3>
-<p>Berbeda dengan KNN yang langsung merata-rata, WKNN menghitung bobot (<span class="math notranslate nohighlight">\(w\)</span>) masing-masing tetangga. Rumus bobot yang paling umum digunakan adalah kebalikan dari jarak:</p>
-<div class="math notranslate nohighlight">
-\[w_i = \frac{1}{d_i}\]</div>
-<p>Maka bobot untuk 3 tetangga terdekat:</p>
+<p>Hasil normalisasi untuk data target T7:</p>
 <ul class="simple">
-<li><p><span class="math notranslate nohighlight">\(w_{T5} = \frac{1}{2.45} \approx 0.408\)</span></p></li>
-<li><p><span class="math notranslate nohighlight">\(w_{T1} = \frac{1}{3} \approx 0.333\)</span></p></li>
-<li><p><span class="math notranslate nohighlight">\(w_{T4} = \frac{1}{5.385} \approx 0.185\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(IPK_{T7} = \frac{2 - 2}{4 - 2} = \frac{0}{2} = 0\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(PO_{T7} = \frac{3.000.000 - 2.000.000}{4.000.000 - 2.000.000} = \frac{1.000.000}{2.000.000} = 0.5\)</span></p></li>
 </ul>
+<p>Tabel data setelah seluruhnya dinormalisasi menjadi seperti ini:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-center"><p>Data</p></th>
+<th class="head text-center"><p>IPK (Norm)</p></th>
+<th class="head text-center"><p>PO (Norm)</p></th>
+<th class="head text-center"><p>JML</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-center"><p>T1</p></td>
+<td class="text-center"><p>0</p></td>
+<td class="text-center"><p>0</p></td>
+<td class="text-center"><p>2.0</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>T2</p></td>
+<td class="text-center"><p>0.5</p></td>
+<td class="text-center"><p>0.5</p></td>
+<td class="text-center"><p>3.0</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p>T3</p></td>
+<td class="text-center"><p>1</p></td>
+<td class="text-center"><p>0</p></td>
+<td class="text-center"><p>2.0</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>T4</p></td>
+<td class="text-center"><p>0</p></td>
+<td class="text-center"><p>0</p></td>
+<td class="text-center"><p>3.0</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p>T5</p></td>
+<td class="text-center"><p>0.5</p></td>
+<td class="text-center"><p>0.5</p></td>
+<td class="text-center"><p>2.0</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>T6</p></td>
+<td class="text-center"><p>1</p></td>
+<td class="text-center"><p>1</p></td>
+<td class="text-center"><p>3.0</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p><strong>T7</strong></p></td>
+<td class="text-center"><p><strong>0</strong></p></td>
+<td class="text-center"><p><strong>0.5</strong></p></td>
+<td class="text-center"><p><strong>?</strong></p></td>
+</tr>
+</tbody>
+</table>
+</div>
 </section>
-<section id="menghitung-nilai-prediksi">
-<h3>3. Menghitung Nilai Prediksi<a class="headerlink" href="#menghitung-nilai-prediksi" title="Permalink to this heading">#</a></h3>
-<p>Nilai prediksi (<span class="math notranslate nohighlight">\(\hat{Y}\)</span>) pada data numerik dihitung dengan mengalikan bobot masing-masing tetangga dengan nilai targetnya, lalu dibagi dengan total keseluruhan bobot:</p>
-<div class="math notranslate nohighlight">
-\[\hat{Y} = \frac{\sum_{i=1}^{k} w_i \cdot Y_i}{\sum_{i=1}^{k} w_i}\]</div>
+<section id="langkah-b-menghitung-jarak-euclidean">
+<h3>Langkah B: Menghitung Jarak Euclidean<a class="headerlink" href="#langkah-b-menghitung-jarak-euclidean" title="Permalink to this heading">#</a></h3>
+<p>Kita hitung jarak T7 (0, 0.5) terhadap data lainnya menggunakan rumus Euclidean:</p>
+<ul class="simple">
+<li><p><strong>Jarak ke T1</strong>: <span class="math notranslate nohighlight">\(\sqrt{(0-0)^2 + (0.5-0)^2} = \sqrt{0.25} = 0.5\)</span></p></li>
+<li><p><strong>Jarak ke T2</strong>: <span class="math notranslate nohighlight">\(\sqrt{(0-0.5)^2 + (0.5-0.5)^2} = \sqrt{0.25} = 0.5\)</span></p></li>
+<li><p><strong>Jarak ke T3</strong>: <span class="math notranslate nohighlight">\(\sqrt{(0-1)^2 + (0.5-0)^2} = \sqrt{1.25} \approx 1.118\)</span></p></li>
+<li><p><strong>Jarak ke T4</strong>: <span class="math notranslate nohighlight">\(\sqrt{(0-0)^2 + (0.5-0)^2} = \sqrt{0.25} = 0.5\)</span></p></li>
+<li><p><strong>Jarak ke T5</strong>: <span class="math notranslate nohighlight">\(\sqrt{(0-0.5)^2 + (0.5-0.5)^2} = \sqrt{0.25} = 0.5\)</span></p></li>
+<li><p><strong>Jarak ke T6</strong>: <span class="math notranslate nohighlight">\(\sqrt{(0-1)^2 + (0.5-1)^2} = \sqrt{1.25} \approx 1.118\)</span></p></li>
+</ul>
+<p>Dengan menggunakan parameter <span class="math notranslate nohighlight">\(k = 3\)</span>, tetangga terdekat dari T7 adalah <strong>T1, T2, dan T4</strong> (Karena jarak T1, T2, T4, dan T5 seri di angka 0.5, urutan prioritas diambil dari baris paling atas).</p>
+</section>
+<section id="langkah-c-menghitung-bobot-nilai-prediksi">
+<h3>Langkah C: Menghitung Bobot &amp; Nilai Prediksi<a class="headerlink" href="#langkah-c-menghitung-bobot-nilai-prediksi" title="Permalink to this heading">#</a></h3>
+<p>Bobot (<span class="math notranslate nohighlight">\(w\)</span>) dihitung menggunakan rumus kebalikan dari jarak, yaitu <span class="math notranslate nohighlight">\(w_i = \frac{1}{d_i}\)</span>:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(w_{T1} = \frac{1}{0.5} = 2\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(w_{T2} = \frac{1}{0.5} = 2\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(w_{T4} = \frac{1}{0.5} = 2\)</span></p></li>
+</ul>
+<p>Prediksi (<span class="math notranslate nohighlight">\(\hat{Y}\)</span>) dihitung dari perkalian bobot dan nilai target dibagi total bobot:
+$<span class="math notranslate nohighlight">\(\hat{Y} = \frac{\sum_{i=1}^{k} w_i \cdot Y_i}{\sum_{i=1}^{k} w_i}\)</span>$</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
 \begin{aligned}
-\hat{Y} &amp;= \frac{(0.408 \times 12) + (0.333 \times 10) + (0.185 \times 6)}{0.408 + 0.333 + 0.185} \\
-\hat{Y} &amp;= \frac{4.896 + 3.33 + 1.11}{0.926} \\
-\hat{Y} &amp;= \frac{9.336}{0.926} \approx 10.08
+\hat{Y} &amp;= \frac{(2 \times 2.0) + (2 \times 3.0) + (2 \times 3.0)}{2 + 2 + 2} \\
+\hat{Y} &amp;= \frac{4 + 6 + 6}{6} \\
+\hat{Y} &amp;= \frac{16}{6} \approx 2.67
 \end{aligned}
 \end{split}\]</div>
-<p>Jadi, hasil prediksi <em>missing value</em> untuk T3 secara manual adalah <strong>10.08</strong>.</p>
+<p><strong>Hasil:</strong> Nilai <em>missing value</em> <code class="docutils literal notranslate"><span class="pre">JML</span></code> untuk T7 diprediksi adalah <strong>2.67</strong>.</p>
 </section>
 </section>
 <hr class="docutils" />
 <section id="implementasi-dengan-python-sklearn">
-<h2>Implementasi dengan Python (Sklearn)<a class="headerlink" href="#implementasi-dengan-python-sklearn" title="Permalink to this heading">#</a></h2>
-<p>Dalam praktik <em>data mining</em> yang sesungguhnya, <strong>data wajib dinormalisasi terlebih dahulu</strong> agar variabel dengan skala besar tidak mendominasi perhitungan jarak.</p>
-<p>Berikut adalah kode Python menggunakan library <code class="docutils literal notranslate"><span class="pre">scikit-learn</span></code> untuk melakukan <strong>Normalisasi</strong> (Min-Max) dan memprediksi nilai menggunakan <strong>WKNN</strong>:</p>
+<h2>3. Implementasi dengan Python (Sklearn)<a class="headerlink" href="#implementasi-dengan-python-sklearn" title="Permalink to this heading">#</a></h2>
+<p>Berikut adalah <em>script</em> Python untuk memproses dataset, melakukan normalisasi <strong>Min-Max</strong>, dan menerapkan algoritma <strong>WKNN</strong>:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
@@ -522,22 +578,16 @@ $<span class="math notranslate nohighlight">\(d(T3, T5) = \sqrt{(5-4)^2 + (4-6)^
 <span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.preprocessing</span><span class="w"> </span><span class="kn">import</span> <span class="n">MinMaxScaler</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.neighbors</span><span class="w"> </span><span class="kn">import</span> <span class="n">KNeighborsRegressor</span>
 
-<span class="c1"># 1. Membuat Dataset</span>
-<span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s1">&#39;T&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;T1&#39;</span><span class="p">,</span> <span class="s1">&#39;T2&#39;</span><span class="p">,</span> <span class="s1">&#39;T3&#39;</span><span class="p">,</span> <span class="s1">&#39;T4&#39;</span><span class="p">,</span> <span class="s1">&#39;T5&#39;</span><span class="p">],</span>
-    <span class="s1">&#39;X1&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span>
-    <span class="s1">&#39;X2&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span>
-    <span class="s1">&#39;X3&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span>
-    <span class="s1">&#39;Y&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">12</span><span class="p">]</span> <span class="c1"># np.nan mewakili missing value</span>
-<span class="p">}</span>
-<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="c1"># 1. Membaca file dataset</span>
+<span class="c1"># Pastikan file tugasWKNN.csv berada di satu folder dengan file eksekusi ini</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;tugasWKNN.csv&#39;</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;;&#39;</span><span class="p">)</span>
 
-<span class="c1"># Memisahkan data training (ada nilai Y) dan data testing (missing Y)</span>
-<span class="n">df_train</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Y&#39;</span><span class="p">])</span>
-<span class="n">df_missing</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Y&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">isnull</span><span class="p">()]</span>
+<span class="c1"># Memisahkan data training (ada nilai JML) dan data testing (missing JML)</span>
+<span class="n">df_train</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;JML&#39;</span><span class="p">])</span>
+<span class="n">df_missing</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;JML&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">isnull</span><span class="p">()]</span>
 
 <span class="c1"># Menentukan kolom fitur</span>
-<span class="n">features</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;X1&#39;</span><span class="p">,</span> <span class="s1">&#39;X2&#39;</span><span class="p">,</span> <span class="s1">&#39;X3&#39;</span><span class="p">]</span>
+<span class="n">features</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;IPK&#39;</span><span class="p">,</span> <span class="s1">&#39;PO&#39;</span><span class="p">]</span>
 
 <span class="c1"># 2. PROSES NORMALISASI (Min-Max Scaler)</span>
 <span class="n">scaler</span> <span class="o">=</span> <span class="n">MinMaxScaler</span><span class="p">()</span>
@@ -545,35 +595,73 @@ $<span class="math notranslate nohighlight">\(d(T3, T5) = \sqrt{(5-4)^2 + (4-6)^
 <span class="c1"># Fit &amp; transform pada data latih, lalu transform pada data missing</span>
 <span class="n">X_train_norm</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">df_train</span><span class="p">[</span><span class="n">features</span><span class="p">])</span>
 <span class="n">X_missing_norm</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">df_missing</span><span class="p">[</span><span class="n">features</span><span class="p">])</span>
-<span class="n">y_train</span> <span class="o">=</span> <span class="n">df_train</span><span class="p">[</span><span class="s1">&#39;Y&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+<span class="n">y_train</span> <span class="o">=</span> <span class="n">df_train</span><span class="p">[</span><span class="s1">&#39;JML&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
 
-<span class="c1"># 3. PEMODELAN WKNN</span>
-<span class="c1"># Menggunakan k=3 dan weights=&#39;distance&#39; untuk menerapkan WKNN</span>
+<span class="c1"># 3. PEMODELAN WKNN </span>
+<span class="c1"># Menggunakan k=3 dan weights=&#39;distance&#39; untuk menerapkan algoritma WKNN</span>
 <span class="n">wknn</span> <span class="o">=</span> <span class="n">KNeighborsRegressor</span><span class="p">(</span><span class="n">n_neighbors</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="s1">&#39;distance&#39;</span><span class="p">)</span>
 <span class="n">wknn</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train_norm</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
 
 <span class="c1"># 4. PREDIKSI</span>
 <span class="n">y_pred</span> <span class="o">=</span> <span class="n">wknn</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_missing_norm</span><span class="p">)</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Hasil prediksi Y untuk T3 dengan WKNN: </span><span class="si">{</span><span class="n">y_pred</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Hasil prediksi nilai JML untuk T7: </span><span class="si">{</span><span class="n">y_pred</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">line</span> <span class="mi">3</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-<span class="ne">----&gt; </span><span class="mi">3</span> <span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.preprocessing</span><span class="w"> </span><span class="kn">import</span> <span class="n">MinMaxScaler</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.neighbors</span><span class="w"> </span><span class="kn">import</span> <span class="n">KNeighborsRegressor</span>
-<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="c1"># 1. Membuat Dataset</span>
-
-<span class="ne">ModuleNotFoundError</span>: No module named &#39;sklearn&#39;
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Hasil prediksi nilai JML untuk T7: 2.67
 </pre></div>
 </div>
 </div>
 </div>
+</section>
+<hr class="docutils" />
+<section id="implementasi-wknn-di-orange-data-mining">
+<h2>Implementasi WKNN di Orange Data Mining<a class="headerlink" href="#implementasi-wknn-di-orange-data-mining" title="Permalink to this heading">#</a></h2>
+<p>Di aplikasi Orange Data Mining, Anda mungkin mendapati hasil akhir prediksi bernilai <strong>2.5</strong> jika menghubungkan dataset mentah langsung ke widget algoritma. Mengapa demikian?</p>
+<p>Hal ini terjadi karena <strong>data belum dinormalisasi</strong>. Tanpa normalisasi, kolom <strong>PO</strong> yang bernilai jutaan akan mendominasi perhitungan jarak Euclidean, sehingga algoritma pada dasarnya mengabaikan jarak dari kolom <strong>IPK</strong>. Tetangga terdekatnya mutlak jatuh pada T2 (JML=3) dan T5 (JML=2) karena jarak nilai PO-nya terdekat, yang mana rata-ratanya menghasilkan angka persis <strong>2.5</strong>.</p>
+<p>Untuk mendapatkan hasil prediksi yang akurat dan seimbang secara jarak (<strong>2.67</strong>), kita <strong>wajib</strong> menggunakan widget <code class="docutils literal notranslate"><span class="pre">Preprocess</span></code> untuk menormalisasi skala data sebelum masuk ke tahap imputasi.</p>
+<p>Berikut adalah urutan langkah pemodelan yang benar di Orange:</p>
+<p><strong>1. Siapkan Dataset</strong></p>
+<ul class="simple">
+<li><p>Tarik widget <code class="docutils literal notranslate"><span class="pre">File</span></code> ke dalam kanvas, lalu muat dataset <code class="docutils literal notranslate"><span class="pre">tugasWKNN.csv</span></code>.</p></li>
+<li><p>Klik ganda pada widget <code class="docutils literal notranslate"><span class="pre">File</span></code>. Pada bagian daftar kolom di bawah, ubah pengaturan <strong>Role</strong> pada kolom <strong>JML</strong> dari <code class="docutils literal notranslate"><span class="pre">Feature</span></code> menjadi <strong>Target</strong>. Klik <em>Apply</em>.
+<img alt="alt text" src="_images/wknn1.png" /></p></li>
+</ul>
+<p><strong>2. Normalisasi Data (Langkah Wajib)</strong></p>
+<ul class="simple">
+<li><p>Buka kategori <em>Data</em>, tarik widget <code class="docutils literal notranslate"><span class="pre">Preprocess</span></code> ke kanvas.</p></li>
+<li><p>Hubungkan garis <em>output</em> dari <code class="docutils literal notranslate"><span class="pre">File</span></code> ke <em>input</em> <code class="docutils literal notranslate"><span class="pre">Preprocess</span></code>.</p></li>
+<li><p>Klik ganda widget <code class="docutils literal notranslate"><span class="pre">Preprocess</span></code>, cari dan klik <strong>Normalize Features</strong> dari menu kiri. Pastikan metodenya diatur ke <strong>Scale to interval [0, 1]</strong> (ini adalah Min-Max Normalization).
+<img alt="alt text" src="_images/wknn2.png" /></p></li>
+</ul>
+<p><strong>3. Konfigurasi Algoritma WKNN</strong></p>
+<ul class="simple">
+<li><p>Buka kategori <em>Model</em>, tarik widget <code class="docutils literal notranslate"><span class="pre">kNN</span></code> ke kanvas. <em>(Catatan: Biarkan widget ini berdiri sendiri, jangan disambungkan ke File atau Preprocess).</em></p></li>
+<li><p>Klik ganda <code class="docutils literal notranslate"><span class="pre">kNN</span></code>, atur parameter <strong>Number of neighbors</strong> (<span class="math notranslate nohighlight">\(k\)</span>) menjadi <strong>3</strong>.</p></li>
+<li><p>Beri tanda centang pada opsi <strong>Weight by distance</strong>. Opsi krusial inilah yang merubah algoritma kNN biasa menjadi WKNN.
+<img alt="alt text" src="_images/wknn3.png" /></p></li>
+</ul>
+<p><strong>4. Proses Imputasi (Prediksi Missing Value)</strong></p>
+<ul class="simple">
+<li><p>Buka kategori <em>Transform</em> (atau Data), tarik widget <code class="docutils literal notranslate"><span class="pre">Impute</span></code> ke kanvas.</p></li>
+<li><p>Buat dua jalur koneksi (<em>wiring</em>) menuju widget ini:</p>
+<ol class="arabic simple">
+<li><p>Hubungkan <code class="docutils literal notranslate"><span class="pre">Preprocess</span></code> ke <code class="docutils literal notranslate"><span class="pre">Impute</span></code> (untuk mengirimkan data yang sudah dinormalisasi).</p></li>
+<li><p>Hubungkan <code class="docutils literal notranslate"><span class="pre">kNN</span></code> ke <code class="docutils literal notranslate"><span class="pre">Impute</span></code> (untuk mengirimkan model algoritma WKNN).</p></li>
+</ol>
+</li>
+<li><p>Klik ganda widget <code class="docutils literal notranslate"><span class="pre">Impute</span></code>, lalu pada bagian <em>Default method</em>, pilih opsi <strong>Model-based imputer</strong>.
+<img alt="alt text" src="_images/wknn4.png" /></p></li>
+</ul>
+<p><strong>5. Evaluasi Hasil</strong></p>
+<ul class="simple">
+<li><p>Tambahkan widget <code class="docutils literal notranslate"><span class="pre">Data</span> <span class="pre">Table</span></code> di ujung akhir rangkaian.</p></li>
+<li><p>Hubungkan <em>output</em> dari <code class="docutils literal notranslate"><span class="pre">Impute</span></code> ke widget <code class="docutils literal notranslate"><span class="pre">Data</span> <span class="pre">Table</span></code> tersebut.</p></li>
+<li><p>Buka <code class="docutils literal notranslate"><span class="pre">Data</span> <span class="pre">Table</span></code>. Anda akan melihat bahwa baris data <strong>T7</strong> pada kolom JML yang sebelumnya kosong (<code class="docutils literal notranslate"><span class="pre">?</span></code>), kini telah terisi otomatis dengan angka desimal <strong>2.67</strong> (atau dibulatkan menjadi 2.7), sesuai dengan perhitungan manual data yang telah dinormalisasi.
+<img alt="alt text" src="_images/wknn5.png" /></p></li>
+</ul>
 </section>
 </section>
 
@@ -641,14 +729,15 @@ $<span class="math notranslate nohighlight">\(d(T3, T5) = \sqrt{(5-4)^2 + (4-6)^
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dataset">Dataset</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#perhitungan-manual-wknn">Perhitungan Manual WKNN</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#menghitung-jarak-euclidean">1. Menghitung Jarak Euclidean</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#menghitung-bobot-weight">2. Menghitung Bobot (Weight)</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#menghitung-nilai-prediksi">3. Menghitung Nilai Prediksi</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dataset">1. Dataset</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#perhitungan-manual-wknn">2. Perhitungan Manual WKNN</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#langkah-a-normalisasi-min-max">Langkah A: Normalisasi (Min-Max)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#langkah-b-menghitung-jarak-euclidean">Langkah B: Menghitung Jarak Euclidean</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#langkah-c-menghitung-bobot-nilai-prediksi">Langkah C: Menghitung Bobot &amp; Nilai Prediksi</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#implementasi-dengan-python-sklearn">Implementasi dengan Python (Sklearn)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#implementasi-dengan-python-sklearn">3. Implementasi dengan Python (Sklearn)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#implementasi-wknn-di-orange-data-mining">Implementasi WKNN di Orange Data Mining</a></li>
 </ul>
   </nav></div>
 
