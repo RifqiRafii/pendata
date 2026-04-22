@@ -400,6 +400,7 @@ document.write(`
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pemodelan-k-nearest-neighbors-knn">2. Pemodelan K-Nearest Neighbors (KNN)</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#metrik-evaluasi">3. Metrik Evaluasi</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretasi-hasil-dan-analisis-kritis">4. Interpretasi Hasil dan Analisis Kritis</a></li>
 </ul>
             </nav>
         </div>
@@ -460,6 +461,12 @@ document.write(`
 <div class="math notranslate nohighlight">
 \[\text{F1-Score} = 2 \times \frac{\text{Precision} \times \text{Recall}}{\text{Precision} + \text{Recall}}\]</div>
 <p><img alt="Accuracy Statistics" src="_images/AKT6.png" /></p>
+</section>
+<section id="interpretasi-hasil-dan-analisis-kritis">
+<h2>4. Interpretasi Hasil dan Analisis Kritis<a class="headerlink" href="#interpretasi-hasil-dan-analisis-kritis" title="Permalink to this heading">#</a></h2>
+<p>Berdasarkan pengujian pada 400 sampel data uji (20% dari dataset), model KNN (<span class="math notranslate nohighlight">\(k=3\)</span>) menghasilkan performa yang sangat baik dan realistis. Model mencapai <strong>Akurasi sebesar 92%</strong>, yang berarti model berhasil mengklasifikasikan 368 dari 400 sampel dengan benar.</p>
+<p>Dari <em>Confusion Matrix</em>, kita dapat mengamati bahwa model menghasilkan 13 <em>False Positives</em> (tanah Tidak Subur yang diprediksi Subur) dan 19 <em>False Negatives</em> (tanah Subur yang diprediksi Tidak Subur). Hal ini menghasilkan nilai <strong>Presisi 93.2%</strong> dan <strong>Recall 90.5%</strong>.</p>
+<p>Secara agronomis, nilai Presisi yang sedikit lebih tinggi daripada Recall ini menguntungkan. Artinya, model lebih berhati-hati dalam melabeli suatu tanah sebagai “Subur”. Ini mengurangi risiko kerugian petani akibat menanam atau memberikan <em>treatment</em> lahan pada tanah yang sebenarnya tidak potensial (menekan angka <em>False Positive</em>). Kesalahan sebanyak 8% secara keseluruhan sangat wajar dan menunjukkan bahwa model memiliki kemampuan generalisasi yang baik (<em>good fit</em>) tanpa mengalami indikasi <em>overfitting</em>.</p>
 </section>
 </section>
 
@@ -526,6 +533,7 @@ document.write(`
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pemodelan-k-nearest-neighbors-knn">2. Pemodelan K-Nearest Neighbors (KNN)</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#metrik-evaluasi">3. Metrik Evaluasi</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretasi-hasil-dan-analisis-kritis">4. Interpretasi Hasil dan Analisis Kritis</a></li>
 </ul>
   </nav></div>
 

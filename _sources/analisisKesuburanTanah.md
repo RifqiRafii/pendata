@@ -52,3 +52,11 @@ $$\text{Recall} = \frac{TP}{TP + FN}$$
 $$\text{F1-Score} = 2 \times \frac{\text{Precision} \times \text{Recall}}{\text{Precision} + \text{Recall}}$$
 
 ![Accuracy Statistics](AKT6.png)
+
+## 4. Interpretasi Hasil dan Analisis Kritis
+
+Berdasarkan pengujian pada 400 sampel data uji (20% dari dataset), model KNN ($k=3$) menghasilkan performa yang sangat baik dan realistis. Model mencapai **Akurasi sebesar 92%**, yang berarti model berhasil mengklasifikasikan 368 dari 400 sampel dengan benar.
+
+Dari *Confusion Matrix*, kita dapat mengamati bahwa model menghasilkan 13 *False Positives* (tanah Tidak Subur yang diprediksi Subur) dan 19 *False Negatives* (tanah Subur yang diprediksi Tidak Subur). Hal ini menghasilkan nilai **Presisi 93.2%** dan **Recall 90.5%**. 
+
+Secara agronomis, nilai Presisi yang sedikit lebih tinggi daripada Recall ini menguntungkan. Artinya, model lebih berhati-hati dalam melabeli suatu tanah sebagai "Subur". Ini mengurangi risiko kerugian petani akibat menanam atau memberikan *treatment* lahan pada tanah yang sebenarnya tidak potensial (menekan angka *False Positive*). Kesalahan sebanyak 8% secara keseluruhan sangat wajar dan menunjukkan bahwa model memiliki kemampuan generalisasi yang baik (*good fit*) tanpa mengalami indikasi *overfitting*.
