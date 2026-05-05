@@ -1,0 +1,775 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Klasifikasi Menggunakan Naive Bayes Predictor &#8212; Penambangan Data</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'naiveBayes';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Analisis Klasifikasi Kesuburan Tanah" href="analisisKesuburanTanah.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.png" class="logo__image only-light" alt="Penambangan Data - Home"/>
+    <script>document.write(`<img src="_static/logo.png" class="logo__image only-dark" alt="Penambangan Data - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    Mata Kuliah Penambangan Data
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="DataUnderstanding.html">Memahami Data</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="EksplorasiData.html">Eksplorasi Data IRIS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="DescribeData.html">Describing Data</a></li>
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="VisualisasiData.html">Visualisasi Data IRIS</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="MissingValue.html">Missing Value</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="PrediksiIris.html">Prediksi Missing Value pada Data ke-40 (KNN Imputation)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="PrediksiCampuran.html">Prediksi Missing Value Data Kategorikal (KNN Imputation)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="PrediksiWKNN.html">Prediksi Missing Value dengan WKNN</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="PreProcessing.html">Pre-prosesing Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="analisisKesuburanTanah.html">Analisis Klasifikasi Kesuburan Tanah</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Klasifikasi Menggunakan Naive Bayes Predictor</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2FnaiveBayes.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/naiveBayes.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Klasifikasi Menggunakan Naive Bayes Predictor</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#jenis-jenis-naive-bayes-dan-perbedaan-rumusnya">1. Jenis-jenis Naive Bayes dan Perbedaan Rumusnya</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gaussian-naive-bayes">1.1 Gaussian Naive Bayes</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#categorical-naive-bayes">1.2 Categorical Naive Bayes</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#multinomial-naive-bayes">1.3 Multinomial Naive Bayes</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bernoulli-naive-bayes">1.4 Bernoulli Naive Bayes</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#langkah-langkah-algoritma-naive-bayes">2. Langkah-langkah Algoritma Naive Bayes</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#praktik-knime-prediksi-pembelian-laptop">3. Praktik KNIME: Prediksi Pembelian Laptop</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dataset-historis-data-latih">3.1 Dataset Historis (Data Latih)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#target-prediksi-data-uji">3.2 Target Prediksi (Data Uji)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#alur-kerja-pemodelan-di-knime-ekstensi-python-script-legacy">3.3 Alur Kerja Pemodelan di KNIME (Ekstensi Python Script Legacy)</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#kesimpulan-hasil-prediksi">4. Kesimpulan Hasil Prediksi</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="klasifikasi-menggunakan-naive-bayes-predictor">
+<h1>Klasifikasi Menggunakan Naive Bayes Predictor<a class="headerlink" href="#klasifikasi-menggunakan-naive-bayes-predictor" title="Permalink to this heading">#</a></h1>
+<p><strong>Naive Bayes</strong> adalah kelompok algoritma klasifikasi yang didasarkan pada <strong>Teorema Bayes</strong>. Kata “Naive” (Naif) digunakan karena algoritma ini memiliki asumsi independensi bersyarat (<em>conditional independence</em>): ia menganggap bahwa setiap fitur dalam data tidak saling memengaruhi satu sama lain jika kelas targetnya diketahui.</p>
+<p>Kerangka utama Teorema Bayes direpresentasikan dengan rumus:</p>
+<div class="math notranslate nohighlight">
+\[P(Y|X) = \frac{P(X|Y)P(Y)}{P(X)}\]</div>
+<p>Karena asumsi naif tersebut, probabilitas fitur gabungan <span class="math notranslate nohighlight">\(P(X|Y)\)</span> dipecah menjadi perkalian dari probabilitas masing-masing fitur independen <span class="math notranslate nohighlight">\(P(x_i|Y)\)</span>. Sehingga persamaan klasifikasinya menjadi:</p>
+<div class="math notranslate nohighlight">
+\[P(Y|x_1, \dots, x_n) \propto P(Y) \prod_{i=1}^{n} P(x_i|Y)\]</div>
+<section id="jenis-jenis-naive-bayes-dan-perbedaan-rumusnya">
+<h2>1. Jenis-jenis Naive Bayes dan Perbedaan Rumusnya<a class="headerlink" href="#jenis-jenis-naive-bayes-dan-perbedaan-rumusnya" title="Permalink to this heading">#</a></h2>
+<p>Walaupun kerangka utamanya sama, cara algoritma menghitung <strong>Probabilitas Kondisional <span class="math notranslate nohighlight">\(P(x_i|Y)\)</span></strong> berbeda-beda tergantung pada jenis distribusi data fitur yang dianalisis:</p>
+<section id="gaussian-naive-bayes">
+<h3>1.1 Gaussian Naive Bayes<a class="headerlink" href="#gaussian-naive-bayes" title="Permalink to this heading">#</a></h3>
+<ul>
+<li><p><strong>Penggunaan:</strong> Digunakan saat fitur berupa data numerik kontinu (bilangan real/desimal) yang diasumsikan berdistribusi normal (membentuk kurva lonceng).</p></li>
+<li><p><strong>Rumus:</strong> Probabilitas dihitung menggunakan fungsi kepekatan probabilitas (<em>Probability Density Function</em> / PDF) dari distribusi normal:</p>
+<div class="math notranslate nohighlight">
+\[P(x_i|y) = \frac{1}{\sqrt{2\pi\sigma^2_y}} \exp\left(-\frac{(x_i - \mu_y)^2}{2\sigma^2_y}\right)\]</div>
+<p><em>(Di mana <span class="math notranslate nohighlight">\(\mu_y\)</span> adalah rata-rata fitur <span class="math notranslate nohighlight">\(x_i\)</span> pada kelas <span class="math notranslate nohighlight">\(y\)</span>, dan <span class="math notranslate nohighlight">\(\sigma^2_y\)</span> adalah variansnya).</em></p>
+</li>
+</ul>
+</section>
+<section id="categorical-naive-bayes">
+<h3>1.2 Categorical Naive Bayes<a class="headerlink" href="#categorical-naive-bayes" title="Permalink to this heading">#</a></h3>
+<ul>
+<li><p><strong>Penggunaan:</strong> Digunakan saat fitur bersifat kategorikal diskrit (label huruf/kata tanpa tingkatan).</p></li>
+<li><p><strong>Rumus:</strong> Probabilitas dihitung murni dari rasio frekuensi kemunculan kategori tersebut di dalam suatu kelas. Umumnya ditambahkan <em>Laplace Smoothing</em> (<span class="math notranslate nohighlight">\(\alpha\)</span>) untuk mencegah nilai peluang nol (<em>Zero Probability Problem</em>):</p>
+<div class="math notranslate nohighlight">
+\[P(x_i|y) = \frac{N_{x_i, y} + \alpha}{N_y + \alpha c}\]</div>
+<p><em>(Di mana <span class="math notranslate nohighlight">\(N_{x_i, y}\)</span> adalah jumlah fitur <span class="math notranslate nohighlight">\(x_i\)</span> yang muncul di kelas <span class="math notranslate nohighlight">\(y\)</span>, <span class="math notranslate nohighlight">\(N_y\)</span> adalah total sampel kelas <span class="math notranslate nohighlight">\(y\)</span>, dan <span class="math notranslate nohighlight">\(c\)</span> adalah jumlah kategori unik).</em></p>
+</li>
+</ul>
+</section>
+<section id="multinomial-naive-bayes">
+<h3>1.3 Multinomial Naive Bayes<a class="headerlink" href="#multinomial-naive-bayes" title="Permalink to this heading">#</a></h3>
+<ul>
+<li><p><strong>Penggunaan:</strong> Digunakan untuk vektor data yang merepresentasikan frekuensi kemunculan peristiwa (<em>counts</em>). Sangat populer untuk klasifikasi teks (<em>Natural Language Processing</em>), seperti menghitung berapa kali sebuah kata muncul dalam satu dokumen (TF-IDF atau <em>Bag of Words</em>).</p></li>
+<li><p><strong>Rumus:</strong> Mirip dengan kategorikal, namun memperhitungkan total frekuensi kumulatif seluruh istilah:</p>
+<div class="math notranslate nohighlight">
+\[P(x_i|y) = \frac{N_{yi} + \alpha}{N_y + \alpha n}\]</div>
+</li>
+</ul>
+</section>
+<section id="bernoulli-naive-bayes">
+<h3>1.4 Bernoulli Naive Bayes<a class="headerlink" href="#bernoulli-naive-bayes" title="Permalink to this heading">#</a></h3>
+<ul>
+<li><p><strong>Penggunaan:</strong> Digunakan untuk fitur logik biner/boolean (1 atau 0, Ya atau Tidak). Tidak peduli seberapa sering sebuah kata muncul, algoritma ini hanya melihat apakah kata tersebut <em>ada</em> (1) atau <em>tidak ada</em> (0).</p></li>
+<li><p><strong>Rumus:</strong> Menghukum dokumen yang tidak memiliki fitur tertentu:</p>
+<div class="math notranslate nohighlight">
+\[P(x_i|y) = P(i|y) x_i + (1 - P(i|y)) (1 - x_i)\]</div>
+</li>
+</ul>
+</section>
+</section>
+<section id="langkah-langkah-algoritma-naive-bayes">
+<h2>2. Langkah-langkah Algoritma Naive Bayes<a class="headerlink" href="#langkah-langkah-algoritma-naive-bayes" title="Permalink to this heading">#</a></h2>
+<p>Secara garis besar, fase <em>training</em> dan klasifikasi algoritma ini melalui tahapan berikut:</p>
+<ol class="arabic simple">
+<li><p><strong>Menghitung Probabilitas Prior <span class="math notranslate nohighlight">\(P(Y)\)</span>:</strong> Menghitung peluang dasar masing-masing kelas target dari total data populasi.</p></li>
+<li><p><strong>Menghitung Probabilitas Kondisional <span class="math notranslate nohighlight">\(P(x_i|Y)\)</span>:</strong> Menghitung peluang setiap nilai fitur spesifik terhadap kelas target menggunakan salah satu rumus fungsi distribusi di atas (Categorical, Gaussian, dsb.).</p></li>
+<li><p><strong>Mengalikan Peluang (Fase Prediksi):</strong> Saat mengevaluasi observasi data baru, probabilitas prior dikalikan dengan seluruh probabilitas kondisional dari fitur data baru tersebut.</p></li>
+<li><p><strong>Menentukan Kelas (Maximum A Posteriori):</strong> Kelas yang menghasilkan nilai probabilitas akhir paling tinggi dipilih sebagai label prediksi final.</p></li>
+</ol>
+</section>
+<section id="praktik-knime-prediksi-pembelian-laptop">
+<h2>3. Praktik KNIME: Prediksi Pembelian Laptop<a class="headerlink" href="#praktik-knime-prediksi-pembelian-laptop" title="Permalink to this heading">#</a></h2>
+<p>Untuk simulasi implementasi <strong>Categorical Naive Bayes</strong>, kita menggunakan dataset historis pengunjung sebuah toko laptop guna memprediksi keputusan pembelian berdasarkan kriteria: Umur, Status Siswa, dan Finansial.</p>
+<section id="dataset-historis-data-latih">
+<h3>3.1 Dataset Historis (Data Latih)<a class="headerlink" href="#dataset-historis-data-latih" title="Permalink to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Umur</p></th>
+<th class="head text-left"><p>Status Siswa</p></th>
+<th class="head text-left"><p>Finansial</p></th>
+<th class="head text-left"><p>Membeli Laptop</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Muda</p></td>
+<td class="text-left"><p>Tidak</p></td>
+<td class="text-left"><p>Tinggi</p></td>
+<td class="text-left"><p>Tidak</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Muda</p></td>
+<td class="text-left"><p>Tidak</p></td>
+<td class="text-left"><p>Tinggi</p></td>
+<td class="text-left"><p>Tidak</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Menengah</p></td>
+<td class="text-left"><p>Tidak</p></td>
+<td class="text-left"><p>Tinggi</p></td>
+<td class="text-left"><p>Ya</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Tua</p></td>
+<td class="text-left"><p>Tidak</p></td>
+<td class="text-left"><p>Sedang</p></td>
+<td class="text-left"><p>Ya</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Tua</p></td>
+<td class="text-left"><p>Ya</p></td>
+<td class="text-left"><p>Rendah</p></td>
+<td class="text-left"><p>Ya</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Tua</p></td>
+<td class="text-left"><p>Ya</p></td>
+<td class="text-left"><p>Rendah</p></td>
+<td class="text-left"><p>Tidak</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Menengah</p></td>
+<td class="text-left"><p>Ya</p></td>
+<td class="text-left"><p>Rendah</p></td>
+<td class="text-left"><p>Ya</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Muda</p></td>
+<td class="text-left"><p>Tidak</p></td>
+<td class="text-left"><p>Sedang</p></td>
+<td class="text-left"><p>Tidak</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Muda</p></td>
+<td class="text-left"><p>Ya</p></td>
+<td class="text-left"><p>Rendah</p></td>
+<td class="text-left"><p>Ya</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Tua</p></td>
+<td class="text-left"><p>Ya</p></td>
+<td class="text-left"><p>Sedang</p></td>
+<td class="text-left"><p>Ya</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Muda</p></td>
+<td class="text-left"><p>Ya</p></td>
+<td class="text-left"><p>Sedang</p></td>
+<td class="text-left"><p>Ya</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Menengah</p></td>
+<td class="text-left"><p>Tidak</p></td>
+<td class="text-left"><p>Sedang</p></td>
+<td class="text-left"><p>Ya</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Menengah</p></td>
+<td class="text-left"><p>Ya</p></td>
+<td class="text-left"><p>Tinggi</p></td>
+<td class="text-left"><p>Ya</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Tua</p></td>
+<td class="text-left"><p>Tidak</p></td>
+<td class="text-left"><p>Sedang</p></td>
+<td class="text-left"><p>Tidak</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="target-prediksi-data-uji">
+<h3>3.2 Target Prediksi (Data Uji)<a class="headerlink" href="#target-prediksi-data-uji" title="Permalink to this heading">#</a></h3>
+<p>Kita akan memprediksi keputusan dari pelanggan baru dengan kriteria:</p>
+<ul class="simple">
+<li><p>Umur: <strong>Muda</strong></p></li>
+<li><p>Status Siswa: <strong>Ya</strong></p></li>
+<li><p>Finansial: <strong>Tinggi</strong></p></li>
+<li><p>Membeli Laptop: <strong>?</strong></p></li>
+</ul>
+</section>
+<section id="alur-kerja-pemodelan-di-knime-ekstensi-python-script-legacy">
+<h3>3.3 Alur Kerja Pemodelan di KNIME (Ekstensi Python Script Legacy)<a class="headerlink" href="#alur-kerja-pemodelan-di-knime-ekstensi-python-script-legacy" title="Permalink to this heading">#</a></h3>
+<p>Implementasi <em>workflow</em> ini memanfaatkan integrasi bahasa pemrograman Python di dalam KNIME menggunakan <em>library</em> <code class="docutils literal notranslate"><span class="pre">scikit-learn</span></code>. Pastikan ekstensi <em>KNIME Python Integration (Legacy)</em> sudah terpasang di sistem Anda.</p>
+<ol class="arabic simple">
+<li><p><strong>Excel Reader (Data Latih):</strong> Tambahkan node <code class="docutils literal notranslate"><span class="pre">Excel</span> <span class="pre">Reader</span></code> ke <em>workspace</em>. Klik ganda, pilih <em>Browse</em>, dan masukkan file <code class="docutils literal notranslate"><span class="pre">Dataset_Laptop.xlsx</span></code>. Pastikan tab sheet <code class="docutils literal notranslate"><span class="pre">Data_Latih</span></code> terpilih dan opsi <em>Table contains column names in row</em> (biasanya baris ke-1) sudah tercentang agar judul kolom terbaca dengan benar.</p></li>
+<li><p><strong>Table Creator (Data Uji):</strong> Tambahkan node <code class="docutils literal notranslate"><span class="pre">Table</span> <span class="pre">Creator</span></code> khusus untuk data pelanggan baru. Buat 4 kolom yang sama persis, lalu masukkan satu baris kriteria (Muda, Ya, Tinggi). Untuk kolom <code class="docutils literal notranslate"><span class="pre">Membeli</span> <span class="pre">Laptop</span></code>, biarkan kosong atau isi dengan tanda <code class="docutils literal notranslate"><span class="pre">?</span></code>.</p></li>
+<li><p><strong>Python Script (2⇒1) (Legacy):</strong> Tambahkan node ini ke <em>workspace</em>. Node ini berfungsi untuk menjalankan skrip Python yang menerima dua <em>input</em> tabel secara bersamaan.</p></li>
+<li><p><strong>Menyambungkan Port:</strong> Hubungkan <em>output</em> dari <code class="docutils literal notranslate"><span class="pre">Excel</span> <span class="pre">Reader</span></code> ke port <em>input</em> atas (port 1) pada node Python. Kemudian, hubungkan <em>output</em> dari <code class="docutils literal notranslate"><span class="pre">Table</span> <span class="pre">Creator</span></code> ke port <em>input</em> bawah (port 2).
+<img alt="alt text" src="_images/NB1.png" /></p></li>
+<li><p><strong>Konfigurasi Skrip Python:</strong> Klik ganda pada node <code class="docutils literal notranslate"><span class="pre">Python</span> <span class="pre">Script</span> <span class="pre">(2⇒1)</span></code> dan hapus semua kode bawaan. Masukkan skrip <em>scikit-learn</em> berikut ke dalam editor:</p></li>
+</ol>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.naive_bayes</span><span class="w"> </span><span class="kn">import</span> <span class="n">CategoricalNB</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.preprocessing</span><span class="w"> </span><span class="kn">import</span> <span class="n">OrdinalEncoder</span>
+
+<span class="c1"># 1. Mengambil data dari port input KNIME</span>
+<span class="n">df_train</span> <span class="o">=</span> <span class="n">input_table_1</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">df_test</span> <span class="o">=</span> <span class="n">input_table_2</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+<span class="c1"># 2. Memisahkan Fitur (X) dan Target (y) pada Data Latih</span>
+<span class="n">X_train</span> <span class="o">=</span> <span class="n">df_train</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Membeli Laptop&#39;</span><span class="p">])</span>
+<span class="n">y_train</span> <span class="o">=</span> <span class="n">df_train</span><span class="p">[</span><span class="s1">&#39;Membeli Laptop&#39;</span><span class="p">]</span>
+
+<span class="c1"># 3. Menyiapkan Fitur (X) pada Data Uji</span>
+<span class="n">X_test</span> <span class="o">=</span> <span class="n">df_test</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Membeli Laptop&#39;</span><span class="p">])</span>
+
+<span class="c1"># 4. Encoding: Mengubah nilai teks kategori menjadi angka untuk Scikit-learn</span>
+<span class="n">encoder</span> <span class="o">=</span> <span class="n">OrdinalEncoder</span><span class="p">()</span>
+<span class="n">X_train_encoded</span> <span class="o">=</span> <span class="n">encoder</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+<span class="n">X_test_encoded</span> <span class="o">=</span> <span class="n">encoder</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+
+<span class="c1"># 5. Membangun dan Melatih Model Naive Bayes Kategorikal</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">CategoricalNB</span><span class="p">()</span>
+<span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train_encoded</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+
+<span class="c1"># 6. Melakukan Prediksi untuk Data Uji</span>
+<span class="n">predictions</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test_encoded</span><span class="p">)</span>
+<span class="n">probabilities</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_test_encoded</span><span class="p">)</span>
+
+<span class="c1"># 7. Menyimpan Hasil Prediksi ke dalam tabel output</span>
+<span class="n">df_test</span><span class="p">[</span><span class="s1">&#39;Prediksi_Membeli&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">predictions</span>
+<span class="n">df_test</span><span class="p">[</span><span class="s1">&#39;Probabilitas_Tidak&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">probabilities</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+<span class="n">df_test</span><span class="p">[</span><span class="s1">&#39;Probabilitas_Ya&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">probabilities</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
+
+<span class="c1"># 8. Mengirim tabel hasil kembali ke KNIME</span>
+<span class="n">output_table</span> <span class="o">=</span> <span class="n">df_test</span>
+
+</pre></div>
+</div>
+</section>
+</section>
+<section id="kesimpulan-hasil-prediksi">
+<h2>4. Kesimpulan Hasil Prediksi<a class="headerlink" href="#kesimpulan-hasil-prediksi" title="Permalink to this heading">#</a></h2>
+<p>Berdasarkan eksekusi model <strong>Categorical Naive Bayes</strong> menggunakan <em>Python Script</em> di KNIME, kita telah berhasil memprediksi keputusan dari pelanggan baru dengan kriteria <strong>Umur: Muda</strong>, <strong>Status Siswa: Ya</strong>, dan <strong>Finansial: Tinggi</strong>.</p>
+<p><img alt="alt text" src="_images/NB2.png" /></p>
+<p>Dari tabel <em>output</em> yang dihasilkan, algoritma menghitung nilai probabilitas kondisional sebagai berikut:</p>
+<ul class="simple">
+<li><p><strong>Probabilitas Tidak (Tidak Membeli):</strong> 0.372 (37.2%)</p></li>
+<li><p><strong>Probabilitas Ya (Membeli):</strong> 0.628 (62.8%)</p></li>
+</ul>
+<p>Sesuai dengan prinsip <em>Maximum A Posteriori</em> pada Teorema Bayes, algoritma akan memilih kelas dengan nilai probabilitas yang paling tinggi. Karena probabilitas “Ya” (0.628) jauh lebih besar daripada probabilitas “Tidak” (0.372), maka model menetapkan klasifikasi akhir menjadi <strong>Ya</strong>.</p>
+<p><strong>Kesimpulan Akhir:</strong>
+Sistem memprediksi bahwa pelanggan baru dengan karakteristik tersebut <strong>AKAN MEMBELI LAPTOP</strong>. Hasil ini menunjukkan secara logis bahwa meskipun pelanggan tersebut masih berusia muda, kombinasi antara statusnya yang merupakan seorang siswa dan memiliki kondisi finansial yang tinggi memberikan dorongan peluang yang dominan terhadap keputusan pembelian.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="analisisKesuburanTanah.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Analisis Klasifikasi Kesuburan Tanah</p>
+      </div>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#jenis-jenis-naive-bayes-dan-perbedaan-rumusnya">1. Jenis-jenis Naive Bayes dan Perbedaan Rumusnya</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gaussian-naive-bayes">1.1 Gaussian Naive Bayes</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#categorical-naive-bayes">1.2 Categorical Naive Bayes</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#multinomial-naive-bayes">1.3 Multinomial Naive Bayes</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bernoulli-naive-bayes">1.4 Bernoulli Naive Bayes</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#langkah-langkah-algoritma-naive-bayes">2. Langkah-langkah Algoritma Naive Bayes</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#praktik-knime-prediksi-pembelian-laptop">3. Praktik KNIME: Prediksi Pembelian Laptop</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dataset-historis-data-latih">3.1 Dataset Historis (Data Latih)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#target-prediksi-data-uji">3.2 Target Prediksi (Data Uji)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#alur-kerja-pemodelan-di-knime-ekstensi-python-script-legacy">3.3 Alur Kerja Pemodelan di KNIME (Ekstensi Python Script Legacy)</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#kesimpulan-hasil-prediksi">4. Kesimpulan Hasil Prediksi</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Rifqi Fairurrafi
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
