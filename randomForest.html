@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Analisis adult.csv dengan Random Forest &#8212; Penambangan Data</title>
+    <title>Klasifikasi Lanjut: Algoritma Random Forest &#8212; Penambangan Data</title>
   
   
   
@@ -62,6 +62,8 @@ const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
     <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'randomForest';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -197,7 +199,7 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="analisisKesuburanTanah.html">Analisis Klasifikasi Kesuburan Tanah</a></li>
 <li class="toctree-l1"><a class="reference internal" href="naiveBayes.html">Klasifikasi Menggunakan Naive Bayes Predictor</a></li>
 <li class="toctree-l1"><a class="reference internal" href="decisionTree.html">Klasifikasi Menggunakan Decision Tree (Pohon Keputusan)</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Analisis adult.csv dengan Random Forest</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Klasifikasi Lanjut: Algoritma Random Forest</a></li>
 </ul>
 
     </div>
@@ -370,7 +372,9 @@ document.write(`
   </button>
 `);
 </script>
-
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
 </div></div>
       
     </div>
@@ -381,11 +385,31 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Analisis adult.csv dengan Random Forest</h1>
+    <h1>Klasifikasi Lanjut: Algoritma Random Forest</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mekanisme-kerja-bagaimana-hutan-terbentuk">1. Mekanisme Kerja: Bagaimana “Hutan” Terbentuk?</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#a-bagging-bootstrap-aggregating">A. Bagging (Bootstrap Aggregating)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#b-feature-randomness-keacakan-fitur">B. Feature Randomness (Keacakan Fitur)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#c-majority-voting-pemungutan-suara">C. Majority Voting (Pemungutan Suara)</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#implementasi-detail-di-knime-analytics-platform">2. Implementasi Detail di KNIME Analytics Platform</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#a-random-forest-learner">A. Random Forest Learner</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#b-random-forest-predictor">B. Random Forest Predictor</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mengapa-akurasi-random-forest-lebih-tinggi">3. Mengapa Akurasi Random Forest Lebih Tinggi?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ringkasan-alur-kerja-workflow">4. Ringkasan Alur Kerja (Workflow)</a></li>
+</ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -395,8 +419,69 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="analisis-adult-csv-dengan-random-forest">
-<h1>Analisis adult.csv dengan Random Forest<a class="headerlink" href="#analisis-adult-csv-dengan-random-forest" title="Permalink to this heading">#</a></h1>
+  <section class="tex2jax_ignore mathjax_ignore" id="klasifikasi-lanjut-algoritma-random-forest">
+<h1>Klasifikasi Lanjut: Algoritma Random Forest<a class="headerlink" href="#klasifikasi-lanjut-algoritma-random-forest" title="Permalink to this heading">#</a></h1>
+<p><strong>Random Forest</strong> adalah salah satu algoritma <em>Machine Learning</em> paling tangguh yang termasuk dalam kategori <strong>Ensemble Learning</strong>. Prinsip dasar dari <em>Ensemble Learning</em> adalah menggabungkan prediksi dari beberapa model individu untuk menghasilkan satu keputusan akhir yang lebih akurat, stabil, dan tahan terhadap anomali data dibandingkan jika hanya menggunakan satu model tunggal.</p>
+<p>Jika <em>Decision Tree</em> dianalogikan sebagai satu pohon keputusan, maka <em>Random Forest</em> adalah sebuah “hutan” yang terdiri dari ratusan hingga ribuan pohon keputusan yang bekerja secara kolektif.</p>
+<section id="mekanisme-kerja-bagaimana-hutan-terbentuk">
+<h2>1. Mekanisme Kerja: Bagaimana “Hutan” Terbentuk?<a class="headerlink" href="#mekanisme-kerja-bagaimana-hutan-terbentuk" title="Permalink to this heading">#</a></h2>
+<p>Random Forest tidak hanya sekadar membuat banyak pohon, tetapi memastikan setiap pohon di dalamnya memiliki karakteristik yang unik melalui dua teknik utama:</p>
+<section id="a-bagging-bootstrap-aggregating">
+<h3>A. Bagging (Bootstrap Aggregating)<a class="headerlink" href="#a-bagging-bootstrap-aggregating" title="Permalink to this heading">#</a></h3>
+<p>Algoritma mengambil sampel data dari dataset asli secara acak dengan pengembalian (<em>with replacement</em>). Proses ini disebut <strong>Bootstrapping</strong>. Akibatnya, setiap pohon di dalam hutan akan dilatih menggunakan subset data yang berbeda-beda. Ada data yang mungkin muncul berulang kali di satu pohon, namun tidak muncul sama sekali di pohon lainnya.</p>
+</section>
+<section id="b-feature-randomness-keacakan-fitur">
+<h3>B. Feature Randomness (Keacakan Fitur)<a class="headerlink" href="#b-feature-randomness-keacakan-fitur" title="Permalink to this heading">#</a></h3>
+<p>Dalam <em>Decision Tree</em> standar, setiap node dievaluasi menggunakan seluruh fitur yang tersedia untuk mencari pembagi terbaik. Namun, pada <em>Random Forest</em>, saat sebuah node akan dibelah, algoritma hanya memilih sebagian kecil fitur secara acak dari total fitur yang ada. Keacakan ini memastikan bahwa pohon-pohon di dalam hutan tidak identik, sehingga meningkatkan keragaman model.</p>
+</section>
+<section id="c-majority-voting-pemungutan-suara">
+<h3>C. Majority Voting (Pemungutan Suara)<a class="headerlink" href="#c-majority-voting-pemungutan-suara" title="Permalink to this heading">#</a></h3>
+<p>Setelah semua pohon selesai dilatih, proses prediksi dilakukan dengan cara:</p>
+<ol class="arabic simple">
+<li><p>Setiap pohon memberikan satu “suara” (prediksi) untuk data baru yang diuji.</p></li>
+<li><p>Random Forest menghitung total suara dari seluruh pohon di dalam hutan.</p></li>
+<li><p>Hasil akhir ditentukan berdasarkan suara terbanyak (untuk klasifikasi) atau nilai rata-rata (untuk regresi).</p></li>
+</ol>
+</section>
+</section>
+<hr class="docutils" />
+<section id="implementasi-detail-di-knime-analytics-platform">
+<h2>2. Implementasi Detail di KNIME Analytics Platform<a class="headerlink" href="#implementasi-detail-di-knime-analytics-platform" title="Permalink to this heading">#</a></h2>
+<p>Berdasarkan standar implementasi pada <em>workflow</em> KNIME, berikut adalah rincian konfigurasi node utama yang digunakan:</p>
+<section id="a-random-forest-learner">
+<h3>A. Random Forest Learner<a class="headerlink" href="#a-random-forest-learner" title="Permalink to this heading">#</a></h3>
+<p>Node ini bertanggung jawab untuk membangun “hutan” berdasarkan data latih.</p>
+<ul class="simple">
+<li><p><strong>Target Column</strong>: Menentukan kolom kelas yang ingin diprediksi (misalnya: <code class="docutils literal notranslate"><span class="pre">Play</span> <span class="pre">Tennis</span></code>).</p></li>
+<li><p><strong>Number of Models</strong>: Menentukan jumlah pohon yang akan dibangun. Angka standar biasanya dimulai dari 100 pohon; semakin banyak pohon, model akan semakin stabil namun memakan waktu komputasi lebih lama.</p></li>
+<li><p><strong>Attribute Selection</strong>: Mengatur jumlah fitur acak yang dipertimbangkan di setiap pemisahan node. Umumnya menggunakan akar kuadrat dari total jumlah fitur (<span class="math notranslate nohighlight">\(\sqrt{n}\)</span>).</p></li>
+<li><p><strong>Tree Settings</strong>: Pengguna dapat mengatur kedalaman maksimal pohon atau menggunakan kriteria kualitas seperti <em>Information Gain</em> atau <em>Gain Ratio</em>.</p></li>
+</ul>
+</section>
+<section id="b-random-forest-predictor">
+<h3>B. Random Forest Predictor<a class="headerlink" href="#b-random-forest-predictor" title="Permalink to this heading">#</a></h3>
+<p>Node ini berfungsi untuk mengaplikasikan model hutan yang sudah dilatih ke data uji.</p>
+<ul class="simple">
+<li><p><strong>Input Ports</strong>: Memiliki dua input; port atas untuk model (dari <em>Learner</em>) dan port bawah untuk data uji (dari <em>Partitioning</em>).</p></li>
+<li><p><strong>Output Data</strong>: Berbeda dengan <em>Decision Tree</em> biasa, <em>Predictor</em> pada Random Forest menghasilkan kolom prediksi akhir beserta kolom <strong>probabilitas</strong> untuk setiap kelas berdasarkan persentase suara dari seluruh pohon.</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="mengapa-akurasi-random-forest-lebih-tinggi">
+<h2>3. Mengapa Akurasi Random Forest Lebih Tinggi?<a class="headerlink" href="#mengapa-akurasi-random-forest-lebih-tinggi" title="Permalink to this heading">#</a></h2>
+<p>Random Forest sering kali memberikan akurasi yang lebih tinggi daripada <em>Decision Tree</em> tunggal karena beberapa alasan teknis berikut:</p>
+<ol class="arabic simple">
+<li><p><strong>Mengatasi Overfitting</strong>: Dengan melatih banyak pohon pada variasi data yang berbeda, kesalahan atau kecenderungan “menghafal data” (<em>overfitting</em>) pada satu pohon akan dinetralkan oleh prediksi benar dari pohon lainnya.</p></li>
+<li><p><strong>Stabilitas Tinggi</strong>: Perubahan kecil pada dataset tidak akan mengubah hasil prediksi secara signifikan karena model bergantung pada suara mayoritas, bukan pada satu jalur logika saja.</p></li>
+<li><p><strong>Reduksi Varians</strong>: Mekanisme agregasi dari banyak pohon menurunkan tingkat varians model secara drastis tanpa menaikkan biasnya, sehingga model lebih tangguh (<em>robust</em>) terhadap data baru.</p></li>
+<li><p><strong>Tangguh Terhadap Outlier</strong>: Dampak dari data yang menyimpang (<em>outlier</em>) menjadi sangat minimal terhadap hasil akhir karena adanya mekanisme pemungutan suara massal.</p></li>
+</ol>
+</section>
+<section id="ringkasan-alur-kerja-workflow">
+<h2>4. Ringkasan Alur Kerja (Workflow)<a class="headerlink" href="#ringkasan-alur-kerja-workflow" title="Permalink to this heading">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">Excel</span> <span class="pre">Reader</span></code> <span class="math notranslate nohighlight">\(\rightarrow\)</span> <code class="docutils literal notranslate"><span class="pre">Partitioning</span> <span class="pre">(90/10)</span></code> <span class="math notranslate nohighlight">\(\rightarrow\)</span> <strong><code class="docutils literal notranslate"><span class="pre">Random</span> <span class="pre">Forest</span> <span class="pre">Learner</span></code></strong> <span class="math notranslate nohighlight">\(\rightarrow\)</span> <strong><code class="docutils literal notranslate"><span class="pre">Random</span> <span class="pre">Forest</span> <span class="pre">Predictor</span></code></strong> <span class="math notranslate nohighlight">\(\rightarrow\)</span> <code class="docutils literal notranslate"><span class="pre">Scorer</span></code>.</p>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -444,6 +529,33 @@ document.write(`
             </div>
             
             
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mekanisme-kerja-bagaimana-hutan-terbentuk">1. Mekanisme Kerja: Bagaimana “Hutan” Terbentuk?</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#a-bagging-bootstrap-aggregating">A. Bagging (Bootstrap Aggregating)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#b-feature-randomness-keacakan-fitur">B. Feature Randomness (Keacakan Fitur)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#c-majority-voting-pemungutan-suara">C. Majority Voting (Pemungutan Suara)</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#implementasi-detail-di-knime-analytics-platform">2. Implementasi Detail di KNIME Analytics Platform</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#a-random-forest-learner">A. Random Forest Learner</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#b-random-forest-predictor">B. Random Forest Predictor</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mengapa-akurasi-random-forest-lebih-tinggi">3. Mengapa Akurasi Random Forest Lebih Tinggi?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ringkasan-alur-kerja-workflow">4. Ringkasan Alur Kerja (Workflow)</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>
