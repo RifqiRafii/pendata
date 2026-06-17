@@ -1,0 +1,619 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Laporan Analisis Prediktif Kinerja Akademik Mahasiswa Berbasis Algoritma Pembelajaran Mesin (Ensemble Learning) &#8212; Penambangan Data</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'uas';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Forecaster explainability: Feature importance, SHAP Values and Partial Dependence Plots" href="explainability.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.png" class="logo__image only-light" alt="Penambangan Data - Home"/>
+    <script>document.write(`<img src="_static/logo.png" class="logo__image only-dark" alt="Penambangan Data - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    Mata Kuliah Penambangan Data
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="DataUnderstanding.html">Memahami Data</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="EksplorasiData.html">Eksplorasi Data IRIS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="DescribeData.html">Describing Data</a></li>
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="VisualisasiData.html">Visualisasi Data IRIS</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="MissingValue.html">Missing Value</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="PrediksiIris.html">Prediksi Missing Value pada Data ke-40 (KNN Imputation)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="PrediksiCampuran.html">Prediksi Missing Value Data Kategorikal (KNN Imputation)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="PrediksiWKNN.html">Prediksi Missing Value dengan WKNN</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="PreProcessing.html">Pre-prosesing Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="analisisKesuburanTanah.html">Analisis Klasifikasi Kesuburan Tanah</a></li>
+<li class="toctree-l1"><a class="reference internal" href="naiveBayes.html">Klasifikasi Menggunakan Naive Bayes Predictor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="decisionTree.html">Klasifikasi Menggunakan Decision Tree (Pohon Keputusan)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="randomForest.html">Klasifikasi Lanjut: Algoritma Random Forest</a></li>
+<li class="toctree-l1"><a class="reference internal" href="regresiLinear.html">Proyek Analisis Data: Regresi Linier Sederhana</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="analisisData.html">Analisis Keterjelasan Model (<em>Explainability</em>) pada Forecasting Deret Waktu</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="explainability.html">Forecaster explainability: Feature importance, SHAP Values and Partial Dependence Plots</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Laporan Analisis Prediktif Kinerja Akademik Mahasiswa Berbasis Algoritma Pembelajaran Mesin (Ensemble Learning)</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2Fuas.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/uas.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Laporan Analisis Prediktif Kinerja Akademik Mahasiswa Berbasis Algoritma Pembelajaran Mesin (Ensemble Learning)</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#latar-belakang-dan-signifikansi-studi">1. Latar Belakang dan Signifikansi Studi</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#karakteristik-dimensionalitas-dataset">2. Karakteristik Dimensionalitas Dataset</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#arsitektur-metodologi-eksperimen">3. Arsitektur Metodologi Eksperimen</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#analisis-diagnostik-kinerja-model">4. Analisis Diagnostik Kinerja Model</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#evaluasi-metrik-akurasi-dan-probabilitas-dasar-baseline">4.1. Evaluasi Metrik Akurasi dan Probabilitas Dasar (<em>Baseline</em>)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dekomposisi-confusion-matrix">4.2. Dekomposisi Confusion Matrix</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ekstraksi-pengetahuan-feature-importance">5. Ekstraksi Pengetahuan (<em>Feature Importance</em>)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#kesimpulan-dan-rekomendasi-lanjutan">6. Kesimpulan dan Rekomendasi Lanjutan</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="laporan-analisis-prediktif-kinerja-akademik-mahasiswa-berbasis-algoritma-pembelajaran-mesin-ensemble-learning">
+<h1>Laporan Analisis Prediktif Kinerja Akademik Mahasiswa Berbasis Algoritma Pembelajaran Mesin (Ensemble Learning)<a class="headerlink" href="#laporan-analisis-prediktif-kinerja-akademik-mahasiswa-berbasis-algoritma-pembelajaran-mesin-ensemble-learning" title="Permalink to this heading">#</a></h1>
+<section id="latar-belakang-dan-signifikansi-studi">
+<h2>1. Latar Belakang dan Signifikansi Studi<a class="headerlink" href="#latar-belakang-dan-signifikansi-studi" title="Permalink to this heading">#</a></h2>
+<p>Dalam paradigma pendidikan modern, <em>Educational Data Mining</em> (EDM) memainkan peran krusial dalam evaluasi kebijakan akademik. Analisis ini bertujuan untuk merancang sebuah model prediktif berbasis <em>Machine Learning</em> yang mampu mengklasifikasikan capaian nilai akhir mahasiswa. Secara institusional, sistem ini diimplementasikan sebagai <em>Early Warning System</em> (Sistem Peringatan Dini) yang berbasis bukti (<em>evidence-based</em>). Dengan mendeteksi probabilitas kegagalan mahasiswa sedini mungkin berdasarkan pola kebiasaan belajar dan demografi, pihak fakultas dapat melakukan intervensi preventif sebelum evaluasi akhir semester dilakukan.</p>
+</section>
+<section id="karakteristik-dimensionalitas-dataset">
+<h2>2. Karakteristik Dimensionalitas Dataset<a class="headerlink" href="#karakteristik-dimensionalitas-dataset" title="Permalink to this heading">#</a></h2>
+<p>Penelitian ini menggunakan dataset <em>Higher Education Students Performance Evaluation</em> dari UCI Machine Learning Repository yang memiliki tantangan spesifik berupa <em>High Dimensionality</em> berbanding terbalik dengan jumlah sampel (<em>Data Starvation</em>).</p>
+<ul class="simple">
+<li><p><strong>Dimensi Observasi:</strong> 145 <em>instances</em> (baris data mahasiswa).</p></li>
+<li><p><strong>Ruang Fitur (Feature Space):</strong> Terdiri dari 30 atribut prediktor berskala ordinal (mencakup aspek demografi, latar belakang sosial-ekonomi keluarga, dan metrik keterlibatan akademik), serta 1 atribut kategorikal berupa <code class="docutils literal notranslate"><span class="pre">COURSE</span> <span class="pre">ID</span></code>. Variabel <code class="docutils literal notranslate"><span class="pre">COURSE</span> <span class="pre">ID</span></code> dipertahankan karena membawa konteks varians tingkat kesulitan dan standar penilaian antar mata kuliah.</p></li>
+<li><p><strong>Variabel Target (Label):</strong> Kolom <code class="docutils literal notranslate"><span class="pre">GRADE</span></code>, sebuah variabel <em>multiclass</em> dengan 8 tingkat kategori (0 untuk Gagal, hingga 7 untuk kategori nilai AA/Tertinggi).</p></li>
+<li><p><strong>Reduksi Dimensi Awal:</strong> Atribut <code class="docutils literal notranslate"><span class="pre">STUDENT</span> <span class="pre">ID</span></code> dieliminasi dari ruang fitur karena bersifat sebagai <em>unique identifier</em> yang memicu <em>noise</em> dan tidak memiliki daya prediktif.</p></li>
+</ul>
+<p>Berikut adalah representasi data mentah (<em>raw data</em>) yang digunakan dalam komputasi awal, dieksekusi secara langsung menggunakan kerangka kerja data terstruktur:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="c1"># Konfigurasi antarmuka Pandas agar seluruh 33 kolom tidak terpotong saat ditampilkan</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s1">&#39;display.max_columns&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+<span class="c1"># Memuat dataset ke dalam struktur DataFrame</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;DATA (1).csv&#39;</span><span class="p">)</span>
+
+<span class="c1"># Menampilkan informasi dimensi matriks data</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Dimensi Matriks Dataset: </span><span class="si">{</span><span class="n">df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> baris, </span><span class="si">{</span><span class="n">df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2"> kolom</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Menampilkan 5 sampel data observasi teratas</span>
+<span class="n">display</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+</pre></div>
+</div>
+</section>
+<section id="arsitektur-metodologi-eksperimen">
+<h2>3. Arsitektur Metodologi Eksperimen<a class="headerlink" href="#arsitektur-metodologi-eksperimen" title="Permalink to this heading">#</a></h2>
+<p>Pendekatan analitik diselesaikan menggunakan metode Klasifikasi Multikelas (<em>Multiclass Classification</em>) dengan menerapkan algoritma ansambel <strong>Random Forest</strong>. Alur kerja (<em>workflow</em>) komputasi disusun melalui tahapan berikut:</p>
+<ol class="arabic simple">
+<li><p><strong>Transformasi dan Prapemrosesan Ruang Vektor:</strong> Variabel target <code class="docutils literal notranslate"><span class="pre">GRADE</span></code> dan <code class="docutils literal notranslate"><span class="pre">COURSE</span> <span class="pre">ID</span></code> ditransformasi secara paksa menjadi tipe data nominal/kategorikal (<em>String</em>). Hal ini menginstruksikan algoritma agar tidak memperlakukan label kelas sebagai nilai numerik kontinu berurutan yang dapat memicu kesalahan komputasi regresi.</p></li>
+<li><p><strong>Partisi Stratifikasi (Stratified Hold-out Validation):</strong> Dataset dipartisi menjadi 80% himpunan latih (<em>Training Set</em>) dan 20% himpunan uji (<em>Testing Set</em>). Implementasi <em>Stratified Sampling</em> mutlak dilakukan untuk memitigasi <em>Class Imbalance</em> (ketidakseimbangan kelas), memastikan bahwa proporsi observasi minoritas (seperti mahasiswa dengan GRADE 0) terwakili secara ekuivalen pada fase pelatihan maupun pengujian.</p></li>
+<li><p><strong>Konfigurasi Pemodelan (Model Training):</strong> Algoritma <em>Random Forest</em> dipilih karena ketangguhannya terhadap <em>Curse of Dimensionality</em> pada dataset berukuran kecil. Model dikonfigurasi menggunakan teknik <em>Bootstrap Aggregating</em> (<em>Bagging</em>) dengan pembentukan 100 pohon keputusan (<em>Decision Trees</em>) independen. Metrik pemisahan simpul (<em>node splitting</em>) dievaluasi menggunakan <em>Gini Index</em> atau <em>Gain Ratio</em> guna memaksimalkan homogenitas prediksi.</p></li>
+</ol>
+<p><img alt="alt text" src="_images/uas_workflow.png" /></p>
+</section>
+<section id="analisis-diagnostik-kinerja-model">
+<h2>4. Analisis Diagnostik Kinerja Model<a class="headerlink" href="#analisis-diagnostik-kinerja-model" title="Permalink to this heading">#</a></h2>
+<section id="evaluasi-metrik-akurasi-dan-probabilitas-dasar-baseline">
+<h3>4.1. Evaluasi Metrik Akurasi dan Probabilitas Dasar (<em>Baseline</em>)<a class="headerlink" href="#evaluasi-metrik-akurasi-dan-probabilitas-dasar-baseline" title="Permalink to this heading">#</a></h3>
+<p>Berdasarkan inferensi model pada himpunan uji, matriks evaluasi menghasilkan akurasi absolut sebesar <strong>31%</strong>.</p>
+<p><img alt="alt text" src="_images/uas_accuracy_scorer.png" /></p>
+<p>Dalam konteks klasifikasi 8 kelas yang sangat spesifik, angka probabilitas dasar (<em>random guessing baseline</em>) dihitung menggunakan persamaan <span class="math notranslate nohighlight">\(\frac{1}{N_{class}} = \frac{1}{8} = 12.5\%\)</span>. Dengan tingkat akurasi 31%, model ini mendemonstrasikan kekuatan prediktif (<em>predictive power</em>) sebesar <strong>2,48 kali lipat</strong> melampaui probabilitas acak murni. Keterbatasan untuk mencapai akurasi absolut yang lebih tinggi (misalnya &gt;80%) sangat dapat dimengerti secara matematis akibat fenomena <em>Data Starvation</em>; memecah himpunan latih yang hanya berisi ~116 observasi ke dalam 8 kategori menyebabkan algoritma kekurangan referensi sampel yang memadai untuk melakukan generalisasi aturan (<em>rule induction</em>) pada kelas-kelas minoritas.</p>
+</section>
+<section id="dekomposisi-confusion-matrix">
+<h3>4.2. Dekomposisi Confusion Matrix<a class="headerlink" href="#dekomposisi-confusion-matrix" title="Permalink to this heading">#</a></h3>
+<p>Diagnostik kinerja yang lebih komprehensif divisualisasikan melalui <em>Confusion Matrix</em>. Evaluasi ini membongkar anatomi “kebingungan” prediksi dari algoritma.</p>
+<p><img alt="alt text" src="_images/uas_confusion_matrix.png" /></p>
+<p>Analisis pada matriks difokuskan pada dua area:</p>
+<ul class="simple">
+<li><p><strong>True Positives (Diagonal Utama):</strong> Konsentrasi observasi pada garis diagonal menunjukkan instansiasi di mana model berhasil memetakan fitur ke kelas target secara sempurna.</p></li>
+<li><p><strong>Misclassification Margin (Area Luar Diagonal):</strong> Kesalahan klasifikasi dievaluasi tingkat keparahannya. Secara empiris, model lebih sering menghasilkan “Salah Tipis” (misal: label aktual GRADE 6, diprediksi GRADE 7 karena proksimitas kedekatan fitur mahasiswa pintar) dibandingkan “Salah Fatal” (label aktual GRADE 0, diprediksi GRADE 7). Ini membuktikan bahwa pohon-pohon keputusan di dalam ansambel telah membentuk aturan logika (<em>decision boundaries</em>) yang rasional dan mendekati kenyataan.</p></li>
+</ul>
+</section>
+</section>
+<section id="ekstraksi-pengetahuan-feature-importance">
+<h2>5. Ekstraksi Pengetahuan (<em>Feature Importance</em>)<a class="headerlink" href="#ekstraksi-pengetahuan-feature-importance" title="Permalink to this heading">#</a></h2>
+<p>Utilitas sejati dari model <em>Random Forest</em> bukan hanya bersembunyi pada akurasi akhir, melainkan pada kapabilitas <em>explainability</em>-nya. Melalui ekstraksi penurunan rata-rata <em>Gini Impurity</em> (<em>Mean Decrease Gini</em>), algoritma menyajikan struktur hierarki prediktor yang paling deterministik terhadap kelulusan mahasiswa.</p>
+<p><img alt="alt text" src="_images/uas_attribute_statistics.png" /></p>
+<p>Berdasarkan ekstraksi fitur tersebut, teridentifikasi bahwa atribut dominan yang mengendalikan pembentukan pohon keputusan bukanlah faktor statis (seperti usia atau demografi dasar), melainkan metrik kebiasaan interaktif (misalnya: frekuensi jam belajar, tingkat kehadiran, dan rekam jejak akademik masa lalu). Temuan ini memvalidasi hipotesis bahwa usaha akademik kognitif memiliki bobot prediktif jauh lebih superior dibandingkan latar belakang sosio-ekonomi.</p>
+</section>
+<section id="kesimpulan-dan-rekomendasi-lanjutan">
+<h2>6. Kesimpulan dan Rekomendasi Lanjutan<a class="headerlink" href="#kesimpulan-dan-rekomendasi-lanjutan" title="Permalink to this heading">#</a></h2>
+<p>Eksperimen pemodelan <em>Machine Learning</em> ini berhasil mengekstraksi dan merumuskan pola perilaku akademik dari data berdimensi tinggi, menghasilkan kinerja yang jauh melampaui ambang batas probabilitas acak di tengah keterbatasan volume sampel. Model ini membuktikan potensinya sebagai instrumen audit akademik (<em>academic auditing tool</em>).</p>
+<p><strong>Rekomendasi untuk Eksperimen Lanjutan (<em>Future Work</em>):</strong>
+Untuk keperluan implementasi operasional <em>Early Warning System</em> yang membutuhkan akurasi presisi tinggi, disarankan untuk mereduksi kompleksitas target (<em>Target Simplification</em>). Mengonversi 8 kelas kategori menjadi klasifikasi biner sederhana (seperti <code class="docutils literal notranslate"><span class="pre">Lulus</span></code> vs <code class="docutils literal notranslate"><span class="pre">Gagal</span></code>) diyakini akan meningkatkan kepadatan sampel per kelas (<em>class density</em>), meminimalisasi <em>noise</em>, dan secara eksponensial mendongkrak persentase akurasi model menuju ambang batas operasional yang optimal.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="explainability.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Forecaster explainability: Feature importance, SHAP Values and Partial Dependence Plots</p>
+      </div>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#latar-belakang-dan-signifikansi-studi">1. Latar Belakang dan Signifikansi Studi</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#karakteristik-dimensionalitas-dataset">2. Karakteristik Dimensionalitas Dataset</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#arsitektur-metodologi-eksperimen">3. Arsitektur Metodologi Eksperimen</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#analisis-diagnostik-kinerja-model">4. Analisis Diagnostik Kinerja Model</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#evaluasi-metrik-akurasi-dan-probabilitas-dasar-baseline">4.1. Evaluasi Metrik Akurasi dan Probabilitas Dasar (<em>Baseline</em>)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dekomposisi-confusion-matrix">4.2. Dekomposisi Confusion Matrix</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ekstraksi-pengetahuan-feature-importance">5. Ekstraksi Pengetahuan (<em>Feature Importance</em>)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#kesimpulan-dan-rekomendasi-lanjutan">6. Kesimpulan dan Rekomendasi Lanjutan</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Rifqi Fairurrafi
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
