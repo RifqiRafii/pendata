@@ -1,3 +1,12 @@
+---
+jupytext:
+  formats: md:myst
+kernelspec:
+  display_name: Python 3
+  language: python
+  name: python3
+---
+
 # Laporan Analisis Prediktif Kinerja Akademik Mahasiswa Berbasis Algoritma Pembelajaran Mesin (Ensemble Learning)
 
 ## 1. Latar Belakang dan Signifikansi Studi
