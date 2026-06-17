@@ -12,7 +12,7 @@ Penelitian ini menggunakan dataset *Higher Education Students Performance Evalua
 
 Berikut adalah representasi data mentah (*raw data*) yang digunakan dalam komputasi awal, dieksekusi secara langsung menggunakan kerangka kerja data terstruktur:
 
-```python
+```{code-cell} ipython3
 import pandas as pd
 
 # Konfigurasi antarmuka Pandas agar seluruh 33 kolom tidak terpotong saat ditampilkan
