@@ -1,12 +1,3 @@
----
-jupytext:
-  formats: md:myst
-kernelspec:
-  display_name: Python 3
-  language: python
-  name: python3
----
-
 # Laporan Analisis Prediktif Kinerja Akademik Mahasiswa Berbasis Algoritma Pembelajaran Mesin (Ensemble Learning)
 
 ## 1. Latar Belakang dan Signifikansi Studi
@@ -21,21 +12,13 @@ Penelitian ini menggunakan dataset *Higher Education Students Performance Evalua
 
 Berikut adalah representasi data mentah (*raw data*) yang digunakan dalam komputasi awal, dieksekusi secara langsung menggunakan kerangka kerja data terstruktur:
 
-```{code-cell} ipython3
-import pandas as pd
+![alt text](uas_table1.png)
 
-# Konfigurasi antarmuka Pandas agar seluruh 33 kolom tidak terpotong saat ditampilkan
-pd.set_option('display.max_columns', None)
+![alt text](uas_table2.png)
 
-# Memuat dataset ke dalam struktur DataFrame
-df = pd.read_csv('DATA (1).csv')
+![alt text](uas_table3.png)
 
-# Menampilkan informasi dimensi matriks data
-print(f"Dimensi Matriks Dataset: {df.shape[0]} baris, {df.shape[1]} kolom\n")
-
-# Menampilkan 5 sampel data observasi teratas
-display(df.head())
-```
+![alt text](uas_table4.png)
 
 ## 3. Arsitektur Metodologi Eksperimen
 Pendekatan analitik diselesaikan menggunakan metode Klasifikasi Multikelas (*Multiclass Classification*) dengan menerapkan algoritma ansambel **Random Forest**. Alur kerja (*workflow*) komputasi disusun melalui tahapan berikut:
